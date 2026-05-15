@@ -154,7 +154,7 @@ namespace GUI_QLPK
                 subMenu.Visible = false;
             }
         }
-        //nút chính
+        //nút chín
         private void btnHoaDon_Click(object sender, EventArgs e)
         {
             label_Val.Text = "Hóa Dơn";
