@@ -52,11 +52,11 @@ namespace GUI_QLPK
                 return;
             }
             string email = txtEmail.Text.Trim();
-            if (!email.EndsWith("@gmail.com"))
-            {
-                MessageBox.Show("Vui lòng nhập email đúng định dạng @gmail.com", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            //if (!email.EndsWith("@gmail.com"))
+            //{
+            //    MessageBox.Show("Vui lòng nhập email đúng định dạng @gmail.com", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return;
+            //}
             BenhNhanDTO bn = new BenhNhanDTO();
             phieukhambenhDTO pkb = new phieukhambenhDTO();
             PhieukhambenhBUS pkbBus = new PhieukhambenhBUS();

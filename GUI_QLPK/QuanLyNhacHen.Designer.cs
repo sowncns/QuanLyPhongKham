@@ -28,49 +28,51 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gird = new Guna.UI2.WinForms.Guna2DataGridView();
             this.label3 = new System.Windows.Forms.Label();
             this.trangthaigui = new Guna.UI2.WinForms.Guna2ComboBox();
             this.timkiem = new Guna.UI2.WinForms.Guna2Button();
             this.guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.btnGuiMail = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)(this.gird)).BeginInit();
             this.SuspendLayout();
             // 
             // gird
             // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
-            this.gird.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.gird.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gird.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.gird.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gird.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gird.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.gird.ColumnHeadersHeight = 30;
             this.gird.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gird.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gird.DefaultCellStyle = dataGridViewCellStyle3;
             this.gird.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.gird.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.gird.Location = new System.Drawing.Point(0, 195);
+            this.gird.Location = new System.Drawing.Point(0, 240);
+            this.gird.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gird.Name = "gird";
             this.gird.RowHeadersVisible = false;
             this.gird.RowHeadersWidth = 45;
             this.gird.RowTemplate.Height = 28;
-            this.gird.Size = new System.Drawing.Size(1092, 730);
+            this.gird.Size = new System.Drawing.Size(1456, 898);
             this.gird.TabIndex = 27;
             this.gird.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.gird.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -98,9 +100,10 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 106);
+            this.label3.Location = new System.Drawing.Point(16, 130);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(0, 21);
+            this.label3.Size = new System.Drawing.Size(0, 23);
             this.label3.TabIndex = 28;
             // 
             // trangthaigui
@@ -118,9 +121,10 @@
             "Tất cả",
             "Chưa gửi",
             "Đã gửi"});
-            this.trangthaigui.Location = new System.Drawing.Point(102, 106);
+            this.trangthaigui.Location = new System.Drawing.Point(136, 130);
+            this.trangthaigui.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.trangthaigui.Name = "trangthaigui";
-            this.trangthaigui.Size = new System.Drawing.Size(247, 36);
+            this.trangthaigui.Size = new System.Drawing.Size(328, 36);
             this.trangthaigui.TabIndex = 33;
             // 
             // timkiem
@@ -137,9 +141,10 @@
             this.timkiem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(83)))), ((int)(((byte)(251)))));
             this.timkiem.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(83)))), ((int)(((byte)(251)))));
             this.timkiem.HoverState.ForeColor = System.Drawing.Color.White;
-            this.timkiem.Location = new System.Drawing.Point(407, 106);
+            this.timkiem.Location = new System.Drawing.Point(543, 130);
+            this.timkiem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.timkiem.Name = "timkiem";
-            this.timkiem.Size = new System.Drawing.Size(123, 36);
+            this.timkiem.Size = new System.Drawing.Size(164, 44);
             this.timkiem.TabIndex = 34;
             this.timkiem.Text = "Lọc";
             this.timkiem.Click += new System.EventHandler(this.timkiem_Click);
@@ -148,24 +153,42 @@
             // 
             this.guna2HtmlLabel1.BackColor = System.Drawing.Color.Transparent;
             this.guna2HtmlLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.73585F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.guna2HtmlLabel1.Location = new System.Drawing.Point(351, 25);
+            this.guna2HtmlLabel1.Location = new System.Drawing.Point(468, 31);
+            this.guna2HtmlLabel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            this.guna2HtmlLabel1.Size = new System.Drawing.Size(389, 39);
+            this.guna2HtmlLabel1.Size = new System.Drawing.Size(431, 42);
             this.guna2HtmlLabel1.TabIndex = 35;
             this.guna2HtmlLabel1.Text = "DANH SÁCH NHẮC HẸN";
             // 
+            // btnGuiMail
+            // 
+            this.btnGuiMail.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnGuiMail.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnGuiMail.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnGuiMail.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnGuiMail.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnGuiMail.ForeColor = System.Drawing.Color.White;
+            this.btnGuiMail.Location = new System.Drawing.Point(755, 130);
+            this.btnGuiMail.Name = "btnGuiMail";
+            this.btnGuiMail.Size = new System.Drawing.Size(180, 45);
+            this.btnGuiMail.TabIndex = 36;
+            this.btnGuiMail.Text = "Gửi mail";
+            this.btnGuiMail.Click += new System.EventHandler(this.btnGuiMail_Click);
+            // 
             // QuanLyNhacHen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightCyan;
-            this.ClientSize = new System.Drawing.Size(1092, 925);
+            this.ClientSize = new System.Drawing.Size(1456, 1138);
+            this.Controls.Add(this.btnGuiMail);
             this.Controls.Add(this.guna2HtmlLabel1);
             this.Controls.Add(this.timkiem);
             this.Controls.Add(this.trangthaigui);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.gird);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "QuanLyNhacHen";
             this.Text = "QuanLyNhacHen";
             ((System.ComponentModel.ISupportInitialize)(this.gird)).EndInit();
@@ -181,5 +204,6 @@
         private Guna.UI2.WinForms.Guna2ComboBox trangthaigui;
         private Guna.UI2.WinForms.Guna2Button timkiem;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel1;
+        private Guna.UI2.WinForms.Guna2Button btnGuiMail;
     }
 }

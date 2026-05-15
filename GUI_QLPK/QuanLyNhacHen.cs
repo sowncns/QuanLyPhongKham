@@ -26,11 +26,23 @@ namespace GUI_QLPK
         public QuanLyNhacHen()
         {
             InitializeComponent();
+            if (!gird.Columns.Contains("Chon"))
+            {
+                DataGridViewCheckBoxColumn chk =
+                    new DataGridViewCheckBoxColumn();
+
+                chk.Name = "Chon";
+                chk.HeaderText = "Chọn";
+
+                gird.Columns.Insert(0, chk);
+            }
+            gird.AllowUserToAddRows = false;
             trangthaigui.SelectedIndex = 0; // Mặc định chọn "Tất cả"
             TimVaGuiMailNhacHen();
             load_data();
             gird.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
+
         private void load_data()
         {
             stt = 1;
@@ -47,10 +59,11 @@ namespace GUI_QLPK
                 System.Windows.Forms.MessageBox.Show("Có lỗi khi lấy thông tin từ DB", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 return;
             }
-
+            stt = 1;
             DataTable table = new DataTable();
+           // table.Columns.Add("Chon", typeof(bool));
             table.Columns.Add("Số thứ tự", typeof(int));
-            table.Columns.Add("Mã bệnh nhân", typeof(string));
+           // table.Columns.Add("Mã bệnh nhân", typeof(string));
             table.Columns.Add("Tên bệnh nhân", typeof(string));
             table.Columns.Add("Ngày tái khám", typeof(string));
             table.Columns.Add("Email", typeof(string));
@@ -64,7 +77,7 @@ namespace GUI_QLPK
                     {
                         DataRow row = table.NewRow();
                         row["Số thứ tự"] = stt;
-                        row["Mã bệnh nhân"] = pkb.MaPKB;
+                       // row["Mã bệnh nhân"] = pkb.MaPKB;
                         row["Tên bệnh nhân"] = bn.TenBN;
                         row["Ngày tái khám"] = pkb.NgayTaiKham.ToString("dd/MM/yyyy");
                         row["Email"] = bn.Email;
@@ -77,6 +90,58 @@ namespace GUI_QLPK
             }
 
             gird.DataSource = table;
+            gird.Columns["Đã gửi mail"].ReadOnly = true;
+        }
+        private void btnGuiMail_Click(
+    object sender,
+    EventArgs e)
+        {
+            foreach (DataGridViewRow row in gird.Rows)
+            {
+                bool isChecked = false;
+
+                if (row.Cells["Chon"].Value != null)
+                {
+                    isChecked = Convert.ToBoolean(
+                        row.Cells["Chon"].Value
+                    );
+                }
+
+                if (isChecked)
+                {
+                    string tenBN =
+                        row.Cells["Tên bệnh nhân"]
+                        .Value.ToString();
+
+                    string email =
+                        row.Cells["Email"]
+                        .Value.ToString();
+
+                    DateTime ngayHen =
+                    DateTime.ParseExact(
+                        row.Cells["Ngày tái khám"]
+                        .Value.ToString(),
+                        "dd/MM/yyyy",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    );
+
+                    bool ketQua = GuiMailReminder(
+                        email,
+                        tenBN,
+                        ngayHen
+                    );
+
+                    if (ketQua)
+                    {
+                        row.Cells["Đã gửi mail"]
+                            .Value = true;
+                    }
+                }
+            }
+
+            MessageBox.Show(
+                "Đã gửi mail xong"
+            );
         }
         /// <summary>
         /// 1. Tìm tất cả lịch hẹn 2 ngày sau
@@ -131,7 +196,7 @@ namespace GUI_QLPK
                 //tạo đối tượng
                 MailMessage msg = new MailMessage();
                 //Người gửi
-                msg.From = new MailAddress("2251050074trang@ou.edu.vn", "Phòng khám tư nhân");
+                msg.From = new MailAddress("ngocson877469@gmail.com", "Phòng khám tư nhân");
                 //Người nhận
                 msg.To.Add(new MailAddress(toEmail));
                 //tiêu đề
@@ -140,7 +205,7 @@ namespace GUI_QLPK
                 msg.Body = "Chào " + tenBN + ",\n\n" +
                            "Bạn có lịch tái khám vào ngày " + ngayHen.ToString("dd/MM/yyyy") + ".\n" +
                            "Xin vui lòng thu xếp thời gian.\n\n" +
-                           "Trân trọng,\nPhòng khám Trang";
+                           "Trân trọng,\nPhòng khám ";
                 msg.IsBodyHtml = false;  //nd hiển thị là chữ thường
 
                 //cấu hình SMTP
@@ -148,8 +213,8 @@ namespace GUI_QLPK
                 smtp.EnableSsl = true; //Bật TLS cho kết nối.
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network; 
                 smtp.Credentials = new NetworkCredential(// thông tin đăng nhập
-                    "httranggg@gmail.com",
-                    "ycib qlhn mffw sbqi"
+                    "ngocson877469@gmail.com",
+                    "dvxj elft zouj fcpd"
                 );
                 smtp.Send(msg);
                 MessageBox.Show("Gửi mail thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
