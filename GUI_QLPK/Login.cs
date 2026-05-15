@@ -28,6 +28,7 @@ namespace GUI_QLPK
 
         private void dangnhap_Click(object sender, EventArgs e)
         {
+            check = false;
             List<taiKhoanDTO> listTk = tkBUS.select();
             List<loaiTaiKhoanDTO> listLoaiTk = loaitkBUS.select();
             string TENTK = "";
@@ -46,7 +47,19 @@ namespace GUI_QLPK
             {
                 this.Hide();
                 QLPMMain main = new QLPMMain(TENTK);
-                main.Show();
+                main.ShowDialog();
+
+                if (main.isLogout)
+                {
+                    username.Text = "";
+                    matkhau.Text = "";
+                    this.Show();
+                    username.Focus();
+                }
+                else
+                {
+                    this.Close();
+                }
             }
             else
             {

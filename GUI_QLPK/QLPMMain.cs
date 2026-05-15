@@ -241,14 +241,12 @@ namespace GUI_QLPK
             label_Val.Text = "Phiếu khám bệnh";
             container(new ThemPhieuKhamBenh(mataikhoan));
         }
-
+        public bool isLogout = false;
         private void btn_out_Click(object sender, EventArgs e)
         {
+            isLogout = true;   // ← đánh dấu là đang đăng xuất
             this.Close();
-            Login lg = new Login();
-            lg.Show();
         }
-
         private void btnDSBenhNhan_Click(object sender, EventArgs e)
         {
             label_Val.Text = "Danh sách bệnh nhân";
