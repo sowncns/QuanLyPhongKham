@@ -21,7 +21,7 @@ namespace QLPKBUS
             bool re = ktDAL.kethuoc(kt);
             return re;
         }
-        public List<ChiTietToaThuocDTO> selectbypkb(string mapkb)
+        public List<ChiTietToaThuocDTO> selectbypkb(int mapkb)
         {
             return ktDAL.selectbypkb(mapkb);
         }
@@ -29,7 +29,7 @@ namespace QLPKBUS
         {
             return ktDAL.baocaobymonth(month, year);
         }
-        public int solandungbymonth(string mathuoc, string month, string year)
+        public int solandungbymonth(int mathuoc, string month, string year)
         {
             return ktDAL.solandungbymonth(mathuoc, month, year);
         }

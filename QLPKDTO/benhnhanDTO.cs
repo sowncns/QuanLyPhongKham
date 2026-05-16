@@ -8,7 +8,7 @@ namespace QLPKDTO
 {
     public class BenhNhanDTO
     {
-        private string maBN;
+        private int maBN;
         private string tenBN;
         private string diachiBN;
         private string gtBN;
@@ -16,7 +16,7 @@ namespace QLPKDTO
         private string ccCD;
         private string email;
 
-        public string MaBN { get => maBN; set => maBN = value; }
+        public int MaBN { get => maBN; set => maBN = value; }
         public string TenBN { get => tenBN; set => tenBN = value; }
         public string DiachiBN { get => diachiBN; set => diachiBN = value; }
         public string GtBN { get => gtBN; set => gtBN = value; }

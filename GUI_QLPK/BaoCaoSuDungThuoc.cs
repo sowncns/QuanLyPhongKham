@@ -77,7 +77,7 @@ namespace GUI_QLPK
                         donViDTO dv = listDonVi.Find(x => x.MaDonVi == th.MaDonVi); //tìm trong listdonvi lấy ra tên đơn vị
                         row["Đơn Vị Tính"] = dv.TenDonVi;
                         row["Số Lượng"] = kt.SoLuong;
-                        row["Số Lần Dùng"] = ktBus.solandungbymonth(th.MaThuoc.ToString(), month, year);
+                        row["Số Lần Dùng"] = ktBus.solandungbymonth(th.MaThuoc, month, year);
                         table.Rows.Add(row);
                         stt += 1;
                     }
@@ -171,6 +171,11 @@ namespace GUI_QLPK
                     MessageBox.Show("Lỗi khi xuất PDF: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void BaoCaoSuDungThuoc_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

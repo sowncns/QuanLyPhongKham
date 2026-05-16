@@ -8,12 +8,12 @@ namespace QLPKDTO
 {
     public class ChiTietToaThuocDTO
     {
-        private string maThuoc;
-        private string maToa;
+        private int maThuoc;
+        private int maToa;
         private int soLuong;
 
-        public string MaThuoc { get => maThuoc; set => maThuoc = value; }
-        public string MaToa { get => maToa; set => maToa = value; }
+        public int MaThuoc { get => maThuoc; set => maThuoc = value; }
+        public int MaToa { get => maToa; set => maToa = value; }
         public int SoLuong { get => soLuong; set => soLuong = value; }
     }
 }

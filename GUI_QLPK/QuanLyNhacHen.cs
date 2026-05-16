@@ -73,7 +73,7 @@ namespace GUI_QLPK
             {
                 foreach (phieukhambenhDTO pkb in listPKB)
                 {
-                    if (bn.MaBN.ToString() == pkb.MaBenhNhan)
+                    if (bn.MaBN == pkb.MaBenhNhan)
                     {
                         DataRow row = table.NewRow();
                         row["Số thứ tự"] = stt;
@@ -168,7 +168,7 @@ namespace GUI_QLPK
                         BenhNhanDTO bn = null;
                         foreach (BenhNhanDTO item in tatCaBN)
                         {
-                            if (item.MaBN.ToString() == pkb.MaBenhNhan)
+                            if (item.MaBN == pkb.MaBenhNhan)
                             {
                                 bn = item;
                                 break;

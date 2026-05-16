@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDAL;
 using QLPKDTO;
 using System;
@@ -51,7 +51,7 @@ namespace GUI_QLPK
 
             DataTable table = new DataTable();
             table.Columns.Add("Số thứ tự", typeof(int));
-            table.Columns.Add("Mã bệnh nhân", typeof(string));
+            table.Columns.Add("Mã bệnh nhân", typeof(int));
             table.Columns.Add("Tên bệnh nhân", typeof(string));
             table.Columns.Add("Ngày khám", typeof(string));
             table.Columns.Add("Giờ khám", typeof(string));
@@ -77,7 +77,7 @@ namespace GUI_QLPK
                     row["Giờ khám"] = item.lh.NgayHen.ToString("HH:mm");
 
                     // Tìm bác sĩ và điều dưỡng trong listTK (Dùng FirstOrDefault để tránh lặp)
-                    var bacSi = listTK.FirstOrDefault(t => t.MaTK.ToString() == item.lh.MaTaiKhoan);
+                    var bacSi = listTK.FirstOrDefault(t => t.MaTK == item.lh.MaTaiKhoan);
                     var dieuDuong = listTK.FirstOrDefault(t => t.MaTK == item.lh.MaDieuDuong);
 
                     row["Bác sĩ khám"] = bacSi?.Name ?? "Chưa có";

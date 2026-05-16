@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDAL;
 using QLPKDTO;
 using System;
@@ -25,7 +25,7 @@ namespace GUI_QLPK
         private void ThemDichVuMoi_Load(object sender, EventArgs e)
         {
             DichvuBUS dvBus = new DichvuBUS();
-            maDichVu.Text = dvBus.autogenerate_madv().ToString();
+            maDichVu.Text = "Tự động";
         }
 
 

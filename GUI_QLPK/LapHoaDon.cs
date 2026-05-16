@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDAL;
 using QLPKDTO;
 using System;
@@ -40,9 +40,9 @@ namespace GUI_QLPK
         System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
         public float tt;
         public float tkham;
-        public string maNV;
+        public int maNV;
         public int stt;
-        public LapHoaDon(string mataikhoan)
+        public LapHoaDon(int mataikhoan)
         {
             maNV = mataikhoan; //lưu NV đăng nhập
             InitializeComponent();
@@ -58,11 +58,11 @@ namespace GUI_QLPK
             PhieukhambenhBUS pkb = new PhieukhambenhBUS();
             hdBus = new HoadonBUS();
             ngaylap. Text = DateTime.UtcNow.Date.ToString("dd/MM/yyyy");
-            mahd.Text = hdBus.autogenerate_mahd().ToString();
+            mahd.Text = "Tự động";
             load_combobox();
             load_TenBN();
             loadtiendichvu();
-            load_data(mapkb.Text);
+            load_data(int.Parse(mapkb.Text));
         }
         //load PKB & dịch vụ
         public void load_combobox()
@@ -126,7 +126,7 @@ namespace GUI_QLPK
         {
             foreach (phieukhambenhDTO pkb in listpkb)
             {
-                if (pkb.MaPKB == (mapkb.Text))
+                if (pkb.MaPKB == int.Parse(mapkb.Text))
                 {
                     if (listBenhnhan == null)
                     {
@@ -159,10 +159,10 @@ namespace GUI_QLPK
             hoadonDTO hd = new hoadonDTO();
             hd.MaNVTN = maNV;
             hd.TongTien = tt;
-            hd.MaPKB =(mapkb.Text);
+            hd.MaPKB =int.Parse(mapkb.Text);
             hd.NgayLapHoaDon = DateTime.UtcNow.Date;
             hd.TienKham = tkham;
-            hd.TienThuoc = hdBus.tienthuoc(hd, mapkb.Text);
+            hd.TienThuoc = hdBus.tienthuoc(hd, int.Parse(mapkb.Text));
             hd.NgayTaiKham = DateTime.ParseExact(ngayTaiKham.Text,"dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture).Date; ;
             hdBus = new HoadonBUS();
             bool kq = hdBus.them(hd);
@@ -215,7 +215,7 @@ namespace GUI_QLPK
             load();
         }
 
-        public void load_data(string mapkb)
+        public void load_data(int mapkb)
         {
             thBus = new ThuocBUS();
             ktBus = new ChiTietToaThuocBUS();
@@ -279,7 +279,7 @@ namespace GUI_QLPK
             List<dichvuDTO> listdv = dvBus.select();
             foreach (dichvuDTO d in listdv)
             {
-                if (selectedIndex + 1 == int.Parse(d.MaDichVu)) //giả định ID = vị trí+1
+                if (selectedIndex + 1 == (d.MaDichVu)) //giả định ID = vị trí+1
                 {
                     tienkham.Text = d.TienDichVu.ToString();
                     tkham = d.TienDichVu;
@@ -292,7 +292,7 @@ namespace GUI_QLPK
                     }
                     hoadonDTO hd = new hoadonDTO();
                     // Lấy tiền thuốc và chuyển đổi sang kiểu decimal
-                    string tthuoc = hdBus.tienthuoc(hd, mapkb.Text).ToString();
+                    string tthuoc = hdBus.tienthuoc(hd, int.Parse(mapkb.Text)).ToString();
 
                     // Chuyển đổi tiền thuốc sang kiểu decimal và định dạng lại chuỗi
                     decimal valueTthuoc;
@@ -316,17 +316,17 @@ namespace GUI_QLPK
         //khi nguoi dung chon pkb khac tinh toan lai
         private void mapkb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            load_data(mapkb.Text);
+            load_data(int.Parse(mapkb.Text));
             load_TenBN();
             tt = 0;
             stt = 1;
             hdBus = new HoadonBUS();
             hoadonDTO hd = new hoadonDTO();
             load_TenBN();
-            load_data(mapkb.Text);
+            load_data(int.Parse(mapkb.Text));
 
             // Lấy tiền thuốc và chuyển đổi sang kiểu decimal
-            string tthuoc = hdBus.tienthuoc(hd, mapkb.Text).ToString();
+            string tthuoc = hdBus.tienthuoc(hd, int.Parse(mapkb.Text)).ToString();
 
             // Chuyển đổi tiền thuốc sang kiểu decimal và định dạng lại chuỗi
             decimal valueTthuoc;
@@ -354,7 +354,7 @@ namespace GUI_QLPK
 
         private void btnHoanTac_Click(object sender, EventArgs e)
         {
-            mahd.Text = hdBus.autogenerate_mahd().ToString();
+            mahd.Text = "Tự động";
             tongtien.Text = "";
             tienthuoc.Text = "";
             tienkham.Text = "";

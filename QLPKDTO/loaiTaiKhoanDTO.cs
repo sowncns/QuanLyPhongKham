@@ -9,9 +9,9 @@ namespace QLPKDTO
     public class loaiTaiKhoanDTO
     {
         private string tenLoaiaiKhoan;
-        private string maRole;
+        private int maRole;
         public string TenLoaiTaiKhoan { get => tenLoaiaiKhoan; set => tenLoaiaiKhoan = value; }
-        public string MaRole { get => maRole; set => maRole = value; }
+        public int MaRole { get => maRole; set => maRole = value; }
 
     }
 }

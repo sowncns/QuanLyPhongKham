@@ -1,4 +1,4 @@
-﻿using QLPKDTO;
+using QLPKDTO;
 using QLPKDAL;
 using System;
 using System.Collections.Generic;
@@ -23,16 +23,12 @@ namespace QLPKBUS
         {
             return pkbDAL.selectByKeyWord(sKeyword);
         }
-        public string autogenerate_mapkb()
-        {
-            return pkbDAL.AutoGenerateMaPKB();
-        }
         public bool them(phieukhambenhDTO pkb)
         {
             bool re = pkbDAL.them(pkb);
             return re;
         }
-        public bool CapNhatDaGuiMail(string maPKB, bool daGui)
+        public bool CapNhatDaGuiMail(int maPKB, bool daGui)
         {
             return pkbDAL.CapNhatDaGuiMail(maPKB, daGui);
         }

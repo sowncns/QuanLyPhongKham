@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDAL;
 using QLPKDTO;
 using System;
@@ -18,7 +18,7 @@ namespace GUI_QLPK
         public DataTable db1 = new DataTable("DichVu");
         DichvuBUS dvBus = new DichvuBUS();
         dichvuDTO dv = new dichvuDTO();
-        public string temp_ma;
+        public int temp_ma;
 
         public QuanLyDichVu()
         {
@@ -45,7 +45,7 @@ namespace GUI_QLPK
                 return;
             }
             DataTable table = new DataTable();
-            table.Columns.Add("Mã dịch vụ", typeof(string));
+            table.Columns.Add("Mã dịch vụ", typeof(int));
             table.Columns.Add("Tên dịch vụ", typeof(string));
             table.Columns.Add("Tiền dịch vụ", typeof(string));
             foreach (dichvuDTO dv in listDichVu)
@@ -130,7 +130,7 @@ namespace GUI_QLPK
                 DataGridViewRow row = gird.Rows[e.RowIndex];
                 txtTenDV.Text = row.Cells[1].Value.ToString();
                 txtTienDV.Text = Convert.ToDecimal(row.Cells[2].Value).ToString("N0");
-                temp_ma = (row.Cells[0].Value.ToString());
+                temp_ma = int.Parse(row.Cells[0].Value.ToString());
             }
         }
     }

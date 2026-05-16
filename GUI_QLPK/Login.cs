@@ -31,7 +31,7 @@ namespace GUI_QLPK
             check = false;
             List<taiKhoanDTO> listTk = tkBUS.select();
             List<loaiTaiKhoanDTO> listLoaiTk = loaitkBUS.select();
-            string TENTK = "";
+            int TENTK = 0;
             foreach(taiKhoanDTO tk in listTk)
             {
                 if(tk.Username == username.Text)

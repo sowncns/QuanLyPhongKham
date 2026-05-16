@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDAL;
 using QLPKDTO;
 using System;
@@ -24,7 +24,7 @@ namespace GUI_QLPK
         private void load()
         {
             bnBus = new BenhNhanBUS();
-            mabenhnhan.Text = bnBus.autogenerate_mabn().ToString();
+            mabenhnhan.Text = "Tự động";
             hoten.Text = "";
             ngaysinh.Value = DateTime.Now;
             gioitinh.Text = "";
@@ -60,7 +60,6 @@ namespace GUI_QLPK
             BenhNhanDTO bn = new BenhNhanDTO();
             phieukhambenhDTO pkb = new phieukhambenhDTO();
             PhieukhambenhBUS pkbBus = new PhieukhambenhBUS();
-            bn.MaBN = mabenhnhan.Text;
             bn.TenBN = hoten.Text;
             bn.GtBN = gioitinh.Text;
             bn.NgsinhBN = ngaysinh.Value;

@@ -1,51 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QLPKDAL;
-using QLPKDTO;
+using QLPKDTO; // Gọi tầng DTO
+using QLPKDAL; // Gọi tầng DAL
 
 namespace QLPKBUS
 {
     public class BenhBUS
     {
         private BenhDAL beDAL;
+
         public BenhBUS()
         {
-            beDAL = new BenhDAL(); // Khởi tạo DAL
+            beDAL = new BenhDAL();
         }
-        public bool them(benhDTO be)
+
+        public bool ThemBenh(benhDTO be)
         {
-            bool re = beDAL.them(be);
-            return re;
+            if (string.IsNullOrEmpty(be.TenBenh))
+            {
+                throw new Exception("Tên bệnh không được phép để trống!");
+            }
+            return beDAL.them(be);
         }
-        public bool sua(benhDTO be, string maBenhold)
+
+        public bool SuaBenh(benhDTO be, int maBenhold) // Đổi maBenhold sang int
         {
-            bool re = beDAL.sua(be, maBenhold);
-            return re;
+            if (string.IsNullOrEmpty(be.TenBenh))
+            {
+                throw new Exception("Tên bệnh sửa đổi không được để trống!");
+            }
+            if (maBenhold <= 0)
+            {
+                throw new Exception("Mã bệnh cũ cần sửa đổi không hợp lệ!");
+            }
+            return beDAL.sua(be, maBenhold);
         }
-        public bool xoa(benhDTO be)
+
+        public bool XoaBenh(benhDTO be)
         {
-            bool re = beDAL.xoa(be);
-            return true;
+            // Kiểm tra an toàn: Nếu mã bệnh <= 0 tức là chưa chọn bệnh hợp lệ để xóa
+            if (be.MaBenh <= 0)
+            {
+                throw new Exception("Mã bệnh cần xóa không hợp lệ!");
+            }
+            return beDAL.xoa(be);
         }
-        // Phương thức lấy danh sách các bệnh
+
         public List<benhDTO> select()
         {
-            return beDAL.select(); // Gọi phương thức select từ DAL để lấy danh sách bệnh
+            return beDAL.select();
         }
+
         public List<benhDTO> selectByKeyWord(string sKeyword)
         {
+            if (sKeyword == null) sKeyword = string.Empty;
             return beDAL.selectByKeyWord(sKeyword);
-        }
-        public string autogenerate_mabenh()
-        {
-            return beDAL.autogenerate_mabenh();
-        }
-        public bool kiemTraTrungTen(string tenBenh)
-        {
-            return beDAL.kiemTraTrungTen(tenBenh);
         }
     }
 }

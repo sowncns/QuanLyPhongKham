@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -40,7 +40,7 @@ namespace GUI_QLPK
             db1.Rows.Clear();
             db1.Columns.Clear();
 
-            db1.Columns.Add("Mã thuốc", typeof(string));
+            db1.Columns.Add("Mã thuốc", typeof(int));
             db1.Columns.Add("Tên thuốc", typeof(string));
             db1.Columns.Add("Đơn vị", typeof(string));
             db1.Columns.Add("Đơn giá", typeof(string));
@@ -62,7 +62,7 @@ namespace GUI_QLPK
             mapkb.SelectedIndex = -1;
 
             // tự sinh mã toa
-            maToa.Text = ttBus.autogenerate_matoa().ToString();
+            maToa.Text = "Tự động";
 
             gird.DataSource = db1.DefaultView;
         }
@@ -75,7 +75,7 @@ namespace GUI_QLPK
             soLuong.Text = "";
             TenThuoc.Text = "";
 
-            maToa.Text = ttBus.autogenerate_matoa().ToString();
+            maToa.Text = "Tự động";
 
             gird.DataSource = db1.DefaultView;
         }
@@ -92,7 +92,7 @@ namespace GUI_QLPK
             }
 
             DataTable table = new DataTable();
-            table.Columns.Add("Mã thuốc", typeof(string));
+            table.Columns.Add("Mã thuốc", typeof(int));
             table.Columns.Add("Tên thuốc", typeof(string));
 
             foreach (thuocDTO th in listThuoc)
@@ -137,10 +137,10 @@ namespace GUI_QLPK
             
             List<toathuocDTO> listToa = ttBus.select();
 
-            string maToaDangDung;
+            int maToaDangDung;
 
             var toaDaCo = listToa
-                .FirstOrDefault(x => x.MaPkb == mapkb.Text);
+                .FirstOrDefault(x => x.MaPkb == int.Parse(mapkb.Text));
             if (toaDaCo != null)
             {
                 // đã có toa → dùng lại toa cũ
@@ -150,8 +150,7 @@ namespace GUI_QLPK
             {
                 // chưa có → tạo mới
                 toathuocDTO tt = new toathuocDTO();
-                tt.MaToa =(maToa.Text);
-                tt.MaPkb = (mapkb.Text);
+                tt.MaPkb = int.Parse(mapkb.Text);
                 tt.NgayKetoa = DateTime.Today;
 
                 bool kqToa = ttBus.them(tt);
@@ -173,7 +172,7 @@ namespace GUI_QLPK
                 ChiTietToaThuocDTO ct = new ChiTietToaThuocDTO();
 
                 ct.MaToa = maToaDangDung;
-                ct.MaThuoc = (gird.Rows[i].Cells[0].Value.ToString());
+                ct.MaThuoc = Convert.ToInt32(gird.Rows[i].Cells[0].Value);
 
                 int soLuongThuoc;
 

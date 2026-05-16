@@ -47,7 +47,7 @@
             this.guna2HtmlLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.73585F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2HtmlLabel1.Location = new System.Drawing.Point(378, 43);
             this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            this.guna2HtmlLabel1.Size = new System.Drawing.Size(354, 39);
+            this.guna2HtmlLabel1.Size = new System.Drawing.Size(320, 35);
             this.guna2HtmlLabel1.TabIndex = 38;
             this.guna2HtmlLabel1.Text = "Báo cáo sử dụng thuốc";
             // 
@@ -64,7 +64,7 @@
             this.nam.Location = new System.Drawing.Point(428, 133);
             this.nam.Margin = new System.Windows.Forms.Padding(2);
             this.nam.Name = "nam";
-            this.nam.Size = new System.Drawing.Size(135, 31);
+            this.nam.Size = new System.Drawing.Size(135, 29);
             this.nam.TabIndex = 37;
             this.nam.Text = "Năm";
             // 
@@ -89,7 +89,7 @@
             this.thang.Location = new System.Drawing.Point(251, 133);
             this.thang.Margin = new System.Windows.Forms.Padding(2);
             this.thang.Name = "thang";
-            this.thang.Size = new System.Drawing.Size(135, 31);
+            this.thang.Size = new System.Drawing.Size(135, 29);
             this.thang.TabIndex = 36;
             this.thang.Text = "Tháng";
             // 
@@ -205,6 +205,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "BaoCaoSuDungThuoc";
             this.Text = "BaoCaoSuDungThuoc";
+            this.Load += new System.EventHandler(this.BaoCaoSuDungThuoc_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gird)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

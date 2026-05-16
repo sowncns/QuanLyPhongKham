@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDAL;
 using QLPKDTO;
 using System;
@@ -18,12 +18,12 @@ namespace GUI_QLPK
         lichHenBUS lhBus = new lichHenBUS();
         BenhNhanBUS bnBus = new BenhNhanBUS();
 
-        private string madd;
+        private int madd;
         private int stt;
         taiKhoanBUS tkBus = new taiKhoanBUS();
         loaiTaiKhoanBUS ltkBus = new loaiTaiKhoanBUS();
         lichHenDTO lh = new lichHenDTO();
-        public DangKyKham(string mataikhoan)
+        public DangKyKham(int mataikhoan)
         {
             madd = mataikhoan;
             InitializeComponent();
@@ -38,7 +38,7 @@ namespace GUI_QLPK
         }
         public void load_data()
         {
-            malichhen.Text = lhBus.autogenerate_malichhen().ToString();
+            malichhen.Text = "Tự động";
             hoten.Text = "";
             mabenhnhan.Text = "";
         }
@@ -112,7 +112,7 @@ namespace GUI_QLPK
             bacsi.DisplayMember = "Name";   
             bacsi.SelectedIndex = -1;      
         }
-        private void load_ten(List<BenhNhanDTO> listBenhNhan, string mabn)
+        private void load_ten(List<BenhNhanDTO> listBenhNhan, int mabn)
         {
             if (listBenhNhan == null)
             {
@@ -121,7 +121,7 @@ namespace GUI_QLPK
             }
             foreach (BenhNhanDTO bn in listBenhNhan)
             {
-                if (bn.MaBN.ToString() == mabn)
+                if (bn.MaBN == mabn)
                 {
                     hoten.Text = bn.TenBN;
 
@@ -133,7 +133,7 @@ namespace GUI_QLPK
         {
             if (mabenhnhan.SelectedIndex < 0) return;
             //lấy mã đã được chọn
-            string selectedMaBN = mabenhnhan.SelectedItem.ToString();
+            int selectedMaBN = int.Parse(mabenhnhan.SelectedItem.ToString());
             //lấy danh sách bệnh nhân
             List<BenhNhanDTO> listBenhNhan = bnBus.select();
             load_ten(listBenhNhan, selectedMaBN);
@@ -166,7 +166,7 @@ namespace GUI_QLPK
             }
             //Kiểm tra trùng lịch theo bác sĩ + ngày giờ
             List<lichHenDTO> dsTrongNgay = lhBus.selectByDate(ngay); //lịch hẹn trong ngày
-            string maBacSiChon = bacsi.SelectedValue.ToString();
+            int maBacSiChon = int.Parse(bacsi.SelectedValue.ToString());
             foreach (lichHenDTO x in dsTrongNgay)
             {
                 if (x.MaTaiKhoan == maBacSiChon && x.NgayHen.TimeOfDay == gio)
@@ -180,8 +180,8 @@ namespace GUI_QLPK
             }
             lichHenDTO lh = new lichHenDTO();
             lh.MaDieuDuong = madd;
-            lh.MaBenhNhan = mabenhnhan.Text;
-            lh.MaTaiKhoan = bacsi.SelectedValue.ToString();
+            lh.MaBenhNhan = int.Parse(mabenhnhan.Text);
+            lh.MaTaiKhoan = int.Parse(bacsi.SelectedValue.ToString());
             lh.NgayHen = lichhen;
             lh.TrangThai = "Chờ khám";
             bool kq = lhBus.them(lh);
@@ -206,8 +206,8 @@ namespace GUI_QLPK
             int stt = 1;
             DataTable table = new DataTable();
             table.Columns.Add("Số thứ tự", typeof(int));
-            table.Columns.Add("Mã lịch hẹn", typeof(string));
-            table.Columns.Add("Mã bệnh nhân", typeof(string));
+            table.Columns.Add("Mã lịch hẹn", typeof(int));
+            table.Columns.Add("Mã bệnh nhân", typeof(int));
             table.Columns.Add("Tên bác sĩ", typeof(string));
             table.Columns.Add("Tên điều dưỡng đăng kí", typeof(string));
             table.Columns.Add("Ngày hẹn", typeof(string));
@@ -219,11 +219,11 @@ namespace GUI_QLPK
             {
 
                 var taiKhoan = listTaiKhoan
-           .FirstOrDefault(x => x.MaTK.ToString() == lh.MaTaiKhoan);
+           .FirstOrDefault(x => x.MaTK== lh.MaTaiKhoan);
 
                 // tìm tên điều dưỡng
                 var dieuDuong = listTaiKhoan
-                    .FirstOrDefault(x => x.MaTK.ToString() == lh.MaDieuDuong.ToString());
+                    .FirstOrDefault(x => x.MaTK == lh.MaDieuDuong);
                 DataRow row = table.NewRow();
 
                 row["Số thứ tự"] = stt;
@@ -269,7 +269,7 @@ namespace GUI_QLPK
 
         private void btn_xoa_Click(object sender, EventArgs e)
         {
-            lh.MaLichHen = malichhen.Text;
+            lh.MaLichHen = int.Parse(malichhen.Text);
             bool kq = lhBus.xoa(lh);
             if (!kq)
             {

@@ -1,4 +1,4 @@
-﻿using QLPKDTO;
+using QLPKDTO;
 using QLPKDAL;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace QLPKBUS
             bool re = dvDAL.them(qd);
             return re;
         }
-        public bool sua(dichvuDTO dv, string maDichVuOld)
+        public bool sua(dichvuDTO dv, int maDichVuOld)
         {
             bool re = dvDAL.sua(dv, maDichVuOld);
             return re;
@@ -37,10 +37,6 @@ namespace QLPKBUS
         public List<dichvuDTO> selectByKeyWord(string sKeyword)
         {
             return dvDAL.selectByKeyWord(sKeyword);
-        }
-        public string autogenerate_madv()
-        {
-            return dvDAL.autogenerate_madv();
         }
     }
 }

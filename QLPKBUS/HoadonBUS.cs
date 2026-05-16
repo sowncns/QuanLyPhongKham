@@ -1,4 +1,4 @@
-﻿using QLPKDTO;
+using QLPKDTO;
 using QLPKDAL;
 using System;
 using System.Collections.Generic;
@@ -36,11 +36,7 @@ namespace QLPKBUS
         {
             return hdDAL.selectByMonth(month, year);
         }
-        public string autogenerate_mahd()
-        {
-            return hdDAL.autogenerate_mahd();
-        }
-        public decimal tienthuoc(hoadonDTO hd, string mapkb)
+        public decimal tienthuoc(hoadonDTO hd, int mapkb)
         {
             decimal re = hdDAL.tienthuoc(hd, mapkb);
             return re;

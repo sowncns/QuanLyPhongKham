@@ -1,4 +1,4 @@
-﻿using QLPKDTO;
+using QLPKDTO;
 using QLPKDAL;
 using System;
 using System.Collections.Generic;
@@ -19,10 +19,6 @@ namespace QLPKBUS
         {
             bool re = ttDAL.them(tt);
             return re;
-        }
-        public string autogenerate_matoa()
-        {
-            return ttDAL.autogenerate_matoa();
         }
         public List<toathuocDTO> select()
         {

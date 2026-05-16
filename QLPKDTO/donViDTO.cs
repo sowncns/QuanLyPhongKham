@@ -8,9 +8,9 @@ namespace QLPKDTO
 {
     public class donViDTO
     {
-        private string maDonVi;
+        private int maDonVi;
         private string tenDonVi;
-        public string MaDonVi { get { return maDonVi; } set { maDonVi = value; } }
+        public int MaDonVi { get { return maDonVi; } set { maDonVi = value; } }
         public string TenDonVi { get { return tenDonVi; } set { tenDonVi = value; } }
     }
 }

@@ -1,4 +1,4 @@
-﻿using QLPKDTO;
+using QLPKDTO;
 using QLPKDAL;
 using System;
 using System.Collections.Generic;
@@ -18,10 +18,6 @@ namespace QLPKBUS
         {
             return lhDAL.select();
         }
-        public string autogenerate_malichhen()
-        {
-            return lhDAL.AutoGenerateMaLichHen();
-        }
         public bool them(lichHenDTO lh)
         {
             bool re = lhDAL.them(lh);
@@ -33,7 +29,7 @@ namespace QLPKBUS
             return re;
         }
 
-        public bool CapNhatTrangThai(string maBenhNhan, string trangThaiMoi)
+        public bool CapNhatTrangThai(int maBenhNhan, string trangThaiMoi)
         {
             return lhDAL.CapNhatTrangThai(maBenhNhan, trangThaiMoi);
         }

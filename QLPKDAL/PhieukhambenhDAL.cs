@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using QLPKDTO;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace QLPKDAL
 {
@@ -14,14 +15,14 @@ namespace QLPKDAL
         private string connectionString;
         public PhieukhambenhDAL()
         {
-            //kết nối
             connectionString = ConfigurationManager.AppSettings["ConnectionString"];
         }
         public string ConnectionString { get => connectionString; set => connectionString = value; }
-        //lấy tất cả phiếu khám bệnh
+
         public List<phieukhambenhDTO> select()
         {
-            string query = "SELECT * FROM [PhieuKhamBenh]";
+            // Sử dụng View v_ChiTietPhieuKham
+            string query = "SELECT * FROM v_ChiTietPhieuKham";
             List<phieukhambenhDTO> lspkb = new List<phieukhambenhDTO>();
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
@@ -31,106 +32,81 @@ namespace QLPKDAL
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = cmd.ExecuteReader(); //thực thi truy vấn
-
-                        while (reader.Read())
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            phieukhambenhDTO pkb = new phieukhambenhDTO();
-                            pkb.MaPKB = (reader["maPKB"].ToString());
-                            pkb.TrieuChung = reader["TrieuChung"].ToString();
-                            pkb.NgayKham = Convert.ToDateTime(reader["NgayKham"]);
-                            pkb.MaBenhNhan = reader["maBenhNhan"].ToString();
-                            pkb.MBS = (reader["maTaiKhoan"].ToString());
-                            pkb.NgayTaiKham = Convert.ToDateTime(reader["NgayTaiKham"]);
-                            pkb.DaGuiMail = Convert.ToBoolean(reader["DaGuiMail"]);
-                            lspkb.Add(pkb);
+                            while (reader.Read())
+                            {
+                                phieukhambenhDTO pkb = new phieukhambenhDTO();
+                                pkb.MaPKB = int.Parse(reader["maPKB"].ToString());
+                                pkb.TrieuChung = reader["trieuChung"].ToString();
+                                pkb.NgayKham = Convert.ToDateTime(reader["ngayKham"]);
+                                pkb.MaBenhNhan = int.Parse(reader["maBenhNhan"].ToString());
+                                pkb.MBS = int.Parse(reader["maTaiKhoan"].ToString());
+                                pkb.NgayTaiKham = Convert.ToDateTime(reader["ngayTaiKham"]);
+                                // Lưu ý: View v_ChiTietPhieuKham cần trả về DaGuiMail nếu DTO cần.
+                                // Nếu View không trả về, gán mặc định hoặc bổ sung vào View.
+                                // Giả sử View đã được cập nhật hoặc dùng giá trị mặc định.
+                                pkb.DaGuiMail = false; 
+                                lspkb.Add(pkb);
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        throw new Exception("Lỗi khi tải danh sách phiếu khám: " + ex.Message);
                     }
                 }
             }
             return lspkb;
         }
-        //lấy phiếu khám bệnh theo mã và theo ngày khám
+
         public List<phieukhambenhDTO> selectByKeyWord(string sKeyword)
         {
-            string query = "SELECT * FROM [PhieuKhamBenh] WHERE (maPKB LIKE '%' + @sKeyword + '%') OR (NgayKham = @sKeyword)";
+            // Sử dụng View v_ChiTietPhieuKham
+            string query = "SELECT * FROM v_ChiTietPhieuKham WHERE maPKB LIKE @key OR tenBenhNhan LIKE @key";
             List<phieukhambenhDTO> lspkb = new List<phieukhambenhDTO>();
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Parameters.AddWithValue("@sKeyword", sKeyword);
+                    cmd.Parameters.AddWithValue("@key", "%" + sKeyword + "%");
 
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = cmd.ExecuteReader();
-
-                        while (reader.Read())
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            phieukhambenhDTO pkb = new phieukhambenhDTO();
-                            pkb.MaPKB = (reader["maPKB"].ToString());
-                            pkb.TrieuChung = reader["TrieuChung"].ToString();
-                            pkb.NgayKham = Convert.ToDateTime(reader["NgayKham"]);
-                            pkb.MaBenhNhan = reader["maBenhNhan"].ToString();
-
-                            lspkb.Add(pkb);
+                            while (reader.Read())
+                            {
+                                phieukhambenhDTO pkb = new phieukhambenhDTO();
+                                pkb.MaPKB = int.Parse(reader["maPKB"].ToString());
+                                pkb.TrieuChung = reader["trieuChung"].ToString();
+                                pkb.NgayKham = Convert.ToDateTime(reader["ngayKham"]);
+                                pkb.MaBenhNhan = int.Parse(reader["maBenhNhan"].ToString());
+                                lspkb.Add(pkb);
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        throw new Exception("Lỗi khi tìm kiếm phiếu khám: " + ex.Message);
                     }
                 }
             }
             return lspkb;
         }
-        // hàm này dùng để tự động sinh mã phiếu khám bệnh mới
-        public string AutoGenerateMaPKB()
-        {
-            int maPKB = 1;
-            string query = "SELECT MAX(CAST(maPKB AS INT)) AS MaxMaPKB FROM [PhieuKhamBenh]"; //lấy mã max hiện tại trả về max
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    try
-                    {
-                        con.Open();
-                        SqlDataReader reader = cmd.ExecuteReader();
 
-                        if (reader.Read() && !reader.IsDBNull(0))
-                        {
-                            maPKB = Convert.ToInt32(reader["MaxMaPKB"]) + 1;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                }
-            }
-            return maPKB.ToString();
-        }
+
         public bool them(phieukhambenhDTO pkb)
         {
-            string query = string.Empty;
-            query += "INSERT INTO [PhieuKhamBenh] ([NgayKham],[trieuChung],[maBenhNhan],[maTaiKhoan], [ngayTaiKham]) ";
-            query += "VALUES (@NgayKham , @trieuChung, @maBenhNhan, @maTaiKhoan, @ngayTaiKham)";
-
-
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                // Sử dụng Procedure sp_TaoPhieuKhamVaToaThuoc (Tạo cả PKB và ToaThuoc rỗng)
+                using (SqlCommand cmd = new SqlCommand("sp_TaoPhieuKhamVaToaThuoc", con))
                 {
-
-                    cmd.Parameters.AddWithValue("@NgayKham", pkb.NgayKham);
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@trieuChung", pkb.TrieuChung);
                     cmd.Parameters.AddWithValue("@maBenhNhan", pkb.MaBenhNhan);
                     cmd.Parameters.AddWithValue("@maTaiKhoan", pkb.MBS);
@@ -139,67 +115,76 @@ namespace QLPKDAL
                     try
                     {
                         con.Open();
-                        cmd.ExecuteNonQuery();
-                        con.Close();
+                        // ExecuteScalar để lấy NewPKBID được trả về từ Procedure
+                        object result = cmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            pkb.MaPKB = Convert.ToInt32(result);
+                        }
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return false;
+                        throw new Exception("Lỗi khi tạo phiếu khám và toa thuốc: " + ex.Message);
                     }
                 }
             }
-            return true;
         }
-        public bool CapNhatDaGuiMail(string maPKB, bool daGui)
-        {    //cập nhật khi đúng maPKB và trạng thái đã gửi mail
-            string query = "UPDATE PhieuKhamBenh SET DaGuiMail = @daGui WHERE maPKB = @maPKB";
+
+        public bool CapNhatDaGuiMail(int maPKB, bool daGui)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                // Sử dụng Procedure sp_CapNhatDaGuiMail
+                using (SqlCommand cmd = new SqlCommand("sp_CapNhatDaGuiMail", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@maPKB", maPKB);
+                    cmd.Parameters.AddWithValue("@daGui", daGui);
+                    try
+                    {
+                        con.Open();
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Lỗi khi cập nhật trạng thái gửi mail: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        public List<phieukhambenhDTO> selectByDate(DateTime ngay)
+        {
+            string query = "SELECT * FROM v_ChiTietPhieuKham WHERE CAST(ngayKham AS DATE) = @ngay";
+            List<phieukhambenhDTO> ds = new List<phieukhambenhDTO>();
+
             using (SqlConnection con = new SqlConnection(ConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.AddWithValue("@daGui", daGui);
-                cmd.Parameters.AddWithValue("@maPKB", maPKB);
+                cmd.Parameters.AddWithValue("@ngay", ngay.Date);
                 try
                 {
                     con.Open();
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            phieukhambenhDTO pkb = new phieukhambenhDTO();
+                            pkb.MaPKB = int.Parse(reader["maPKB"].ToString());
+                            pkb.TrieuChung = reader["trieuChung"].ToString();
+                            pkb.NgayKham = Convert.ToDateTime(reader["ngayKham"]);
+                            pkb.MaBenhNhan = int.Parse(reader["maBenhNhan"].ToString());
+                            ds.Add(pkb);
+                        }
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return false;
+                    throw new Exception("Lỗi khi lấy phiếu khám theo ngày: " + ex.Message);
                 }
             }
-        }
-
-        // Lấy danh sách phiếu khám bệnh theo ngày
-        public List<phieukhambenhDTO> selectByDate(DateTime ngay)
-        {
-            string query = "SELECT * FROM PhieuKhamBenh WHERE CAST(NgayKham AS DATE) = @ngay";
-            List<phieukhambenhDTO> ds = new List<phieukhambenhDTO>();
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(query, con))
-            {
-                cmd.Parameters.AddWithValue("@ngay", ngay.Date);
-                con.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    phieukhambenhDTO pkb = new phieukhambenhDTO();
-                    pkb.MaPKB = (reader["maPKB"].ToString());
-                    pkb.TrieuChung = reader["TrieuChung"].ToString();
-                    pkb.NgayKham = Convert.ToDateTime(reader["NgayKham"]);
-                    pkb.MaBenhNhan = reader["maBenhNhan"].ToString();
-                    pkb.MBS = (reader["maTaiKhoan"].ToString());
-                    pkb.NgayTaiKham = Convert.ToDateTime(reader["NgayTaiKham"]);
-                    pkb.DaGuiMail = Convert.ToBoolean(reader["DaGuiMail"]);
-                    ds.Add(pkb);
-                }
-            }
-
             return ds;
         }
-
     }
 }

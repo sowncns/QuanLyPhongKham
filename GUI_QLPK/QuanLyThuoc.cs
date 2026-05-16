@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDAL;
 using QLPKDTO;
 using System;
@@ -25,7 +25,7 @@ namespace GUI_QLPK
         donviBUS donViBUS = new donviBUS();
         List<cachdungDTO> listcd;
         List<donViDTO> listdv;
-        private string temp;
+        private int temp;
 
         public QuanLyThuoc()
         {
@@ -38,7 +38,7 @@ namespace GUI_QLPK
 
         private void load()
         {
-            mathuoc.Text = thBus.autogenerate_mathuoc().ToString();
+            mathuoc.Text = "Tự động";
             listcd = cdBUS.select();
             listdv = donViBUS.select();
             this.load_combobox(listdv, listcd); //tải dữ liệu vào combobox
@@ -68,7 +68,7 @@ namespace GUI_QLPK
                 return;
             }
             DataTable table = new DataTable();
-            table.Columns.Add("Mã thuốc", typeof(string));
+            table.Columns.Add("Mã thuốc", typeof(int));
             table.Columns.Add("Tên thuốc", typeof(string));
             table.Columns.Add("Đơn vị tính", typeof(string));
             table.Columns.Add("Số lượng", typeof(int));
@@ -177,7 +177,6 @@ namespace GUI_QLPK
                 return;
             }
             thuocDTO th = new thuocDTO();
-            th.MaThuoc = (mathuoc.Text);
             th.TenThuoc = (tenthuoc.Text);
             th.DonGia = (float)gia;// ép decimal sang float
             th.SoLuong = (int)soluong.Value;
@@ -246,7 +245,7 @@ namespace GUI_QLPK
 
         private void Xoa_Click(object sender, EventArgs e)
         {
-            th.MaThuoc = (mathuoc.Text);
+            th.MaThuoc = int.Parse(mathuoc.Text);
             th.TenThuoc = (tenthuoc.Text);
             foreach (donViDTO donvi in listdv)
             {
@@ -292,7 +291,7 @@ namespace GUI_QLPK
                 cachdung.Text = row.Cells[5].Value.ToString();
                 soluong.Value = Convert.ToInt32(row.Cells[3].Value);
 
-                temp = row.Cells[0].Value.ToString();
+                temp = Convert.ToInt32(row.Cells[0].Value);
             }
         }
 

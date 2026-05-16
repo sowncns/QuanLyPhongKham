@@ -1,4 +1,4 @@
-﻿
+
 using QLPKDTO;
 using QLPKBUS;
 using System;
@@ -16,7 +16,7 @@ namespace GUI_QLPK
 {
     public partial class ThemPhieuKhamBenh : Form
     {
-        public string   maBS;
+        public int   maBS;
         BenhNhanBUS bnBUS = new BenhNhanBUS();
         BenhBUS beBus = new BenhBUS();
         ChandoanBUS cdBUS = new ChandoanBUS();
@@ -26,7 +26,7 @@ namespace GUI_QLPK
 
         private int stt;
 
-        public ThemPhieuKhamBenh(string mabs)
+        public ThemPhieuKhamBenh(int mabs)
         {
             maBS = mabs;
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace GUI_QLPK
         // load dữ liệu mặc định cho phiếu khám bệnh
         public void load_data()
         {
-            maPKB.Text = pkbBUS.autogenerate_mapkb().ToString();
+            maPKB.Text = "Tự động";
             mabenhnhan.Text = "";
             hoten.Text = "";
             trieuchung.Text = "";
@@ -58,7 +58,7 @@ namespace GUI_QLPK
             }
         }
         // load tên bệnh nhân theo mã bệnh nhân
-        private void load_ten(List<BenhNhanDTO> listBenhNhan, string mabn)
+        private void load_ten(List<BenhNhanDTO> listBenhNhan, int mabn)
         {
             if (listBenhNhan == null)
             {
@@ -67,7 +67,7 @@ namespace GUI_QLPK
             }
             foreach (BenhNhanDTO bn in listBenhNhan)
             {
-                if (bn.MaBN.ToString() == mabn)
+                if (bn.MaBN == mabn)
                 {
                     hoten.Text = bn.TenBN;
 
@@ -116,10 +116,9 @@ namespace GUI_QLPK
             chandoanDTO cd = new chandoanDTO();
 
             List<benhDTO> listBenh = beBus.select();
-            pkb.MaPKB = (maPKB.Text);
             pkb.NgayKham = DateTime.UtcNow.Date;
             pkb.TrieuChung = trieuchung.Text;
-            pkb.MaBenhNhan = mabenhnhan.Text;
+            pkb.MaBenhNhan = int.Parse(mabenhnhan.Text);
             pkb.NgayTaiKham = ngaytaikham.Value.Date;
             pkb.MBS = maBS;
             bool ADDPKB = pkbBUS.them(pkb); //lưu phiếu
@@ -139,7 +138,7 @@ namespace GUI_QLPK
                     coBenhDuocChon = true;
 
 
-                    cd.MaPkb = (maPKB.Text);
+                    cd.MaPkb = pkb.MaPKB;
                     cd.MaBenh = benhTimDuoc.MaBenh;
                     cd.TenChuanDoan = benhTimDuoc.TenBenh;
                     cd.TrieuChung = trieuchung.Text.Trim();
@@ -160,7 +159,7 @@ namespace GUI_QLPK
             if (!loiChanDoan == true && ADDPKB == true)
             {
                 // Cập nhật trạng thái lịch hẹn thành 'Đã khám'
-                string maBN = (mabenhnhan.Text);
+                int maBN = int.Parse(mabenhnhan.Text);
 
 
                 lhBUS.CapNhatTrangThai(maBN, "Đã khám");
@@ -178,7 +177,7 @@ namespace GUI_QLPK
 
             List<BenhNhanDTO> listBenhNhan = bnBUS.select(); //lấy ds bệnh nhân
             List<lichHenDTO> listLichHen = lhBUS.select(); //lấy ds lịch hẹn
-            string mabs = maBS.ToString(); //mabn hiện tại
+            int mabs = maBS; //mabn hiện tại
             List<lichHenDTO> lhbacsi = new List<lichHenDTO>();
             //lọc lịch hẹn của bác sĩ đang đăng nhập
             foreach (lichHenDTO lh in listLichHen)
@@ -193,7 +192,7 @@ namespace GUI_QLPK
 
             DataTable table = new DataTable();
             table.Columns.Add("Số thứ tự", typeof(int));
-            table.Columns.Add("Mã bệnh nhân", typeof(string));
+            table.Columns.Add("Mã bệnh nhân", typeof(int));
             table.Columns.Add("Tên bệnh nhân", typeof(string));
             table.Columns.Add("Ngày sinh", typeof(string));
             table.Columns.Add("Địa chỉ", typeof(string));
@@ -201,13 +200,13 @@ namespace GUI_QLPK
             table.Columns.Add("Giờ hẹn", typeof(string));
             table.Columns.Add("Trạng thái", typeof(string));
             // dùng HashSet để lưu mã bệnh nhân đang được hiển thị (lưu không trùng)
-            HashSet<string> dsMaBN = new HashSet<string>();
+            HashSet<int> dsMaBN = new HashSet<int>();
 
             foreach (BenhNhanDTO bn in listBenhNhan)
             {
                 foreach (lichHenDTO lh in lhbacsi)
                 {
-                    if (bn.MaBN.ToString() == lh.MaBenhNhan)
+                    if (bn.MaBN == lh.MaBenhNhan)
                     {
                         DataRow row = table.NewRow();
                         row["Số thứ tự"] = stt;
@@ -219,14 +218,14 @@ namespace GUI_QLPK
                         row["Giờ hẹn"] = lh.NgayHen.ToString("hh:mm");
                         row["Trạng thái"] = lh.TrangThai;
                         table.Rows.Add(row);
-                        dsMaBN.Add(bn.MaBN.ToString());
+                        dsMaBN.Add(bn.MaBN);
                         stt += 1;
                     }
                 }
             }
             gird.DataSource = table.DefaultView;
             mabenhnhan.Items.Clear();
-            foreach (string ma in dsMaBN)
+            foreach (int ma in dsMaBN)
             {
                 mabenhnhan.Items.Add(ma);
             }
@@ -257,7 +256,7 @@ namespace GUI_QLPK
         {
             if (mabenhnhan.SelectedIndex < 0) return;
             //lấy mã đã được chọn
-            string selectedMaBN = mabenhnhan.SelectedItem.ToString();
+            int selectedMaBN = int.Parse(mabenhnhan.SelectedItem.ToString());
             //lấy danh sách bệnh nhân
             List<BenhNhanDTO> listBenhNhan = bnBUS.select();
             load_ten(listBenhNhan, selectedMaBN);

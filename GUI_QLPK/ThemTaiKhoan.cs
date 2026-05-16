@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,7 +26,7 @@ namespace GUI_QLPM
         private void load()
         {
             taiKhoanBUS tkBus = new taiKhoanBUS();
-            maTaiKhoan.Text = tkBus.autogenerate_maTaiKhoan().ToString();
+            maTaiKhoan.Text = "Tự động";
             load_combobox();
         }
 
@@ -39,11 +39,10 @@ namespace GUI_QLPM
             else
             {
                 taiKhoanDTO tk = new taiKhoanDTO();
-                tk.MaTK = (maTaiKhoan.Text);
                 tk.Username = username.Text;
                 tk.Password = password.Text;
                 tk.Name = hoTen.Text;
-                tk.MaLoai = (comboBoxRole.SelectedIndex + 1).ToString();
+                tk.MaLoai = (comboBoxRole.SelectedIndex + 1);
 
                 tkBus = new taiKhoanBUS();
                 bool kq = tkBus.them(tk);

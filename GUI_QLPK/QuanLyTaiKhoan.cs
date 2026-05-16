@@ -141,9 +141,9 @@ namespace GUI_QLPM
             tk.Password = password.Text;
             tk.Name = hoten.Text;
             if (comboBoxRole.SelectedValue != null)
-                tk.MaLoai = Convert.ToString(comboBoxRole.SelectedValue);
+                tk.MaLoai = Convert.ToInt32(comboBoxRole.SelectedValue);
 
-            bool kq = tkBus.sua(tk, temp_ma);
+            bool kq = tkBus.sua(tk, int.Parse(temp_ma));
             if (!kq)
                 System.Windows.Forms.MessageBox.Show("Update tài khoản thất bại. Vui lòng kiểm tra lại dữ liệu", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             else

@@ -1,4 +1,4 @@
-﻿using QLPKDAL;
+using QLPKDAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using QLPKDTO;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace QLPKDAL
 {
@@ -19,241 +20,144 @@ namespace QLPKDAL
             connectionString = ConfigurationManager.AppSettings["ConnectionString"];
         }
         public string ConnectionString { get => connectionString; set => connectionString = value; }
+
         public bool them(dichvuDTO dv)
         {
-            string query = string.Empty;
-            query += "INSERT INTO [DichVu] ([tenDichVu], [tienDichVu])";
-            query += "VALUES (@tenDichVu,@tienDichVu)";
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand("sp_ThemDichVu", con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@tenDichVu", dv.TenDichVu);
                     cmd.Parameters.AddWithValue("@tienDichVu", dv.TienDichVu);
                     try
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
-                        con.Close();
-                        con.Dispose();
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return false;
+                        throw new Exception("Lỗi khi thêm dịch vụ: " + ex.Message);
                     }
                 }
             }
-            return true;
         }
-        public bool sua(dichvuDTO dv, string maDichVuOld)
+
+        public bool sua(dichvuDTO dv, int maDichVuOld)
         {
-            string query = string.Empty;
-            query += "update [DichVu]";
-            query += "set tenDichVu=@tenDichVu,tienDichVu=@tienDichVu where maDichVu=@maDichVuOld";
-
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand("sp_SuaDichVu", con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@maDichVu", maDichVuOld);
                     cmd.Parameters.AddWithValue("@tenDichVu", dv.TenDichVu);
                     cmd.Parameters.AddWithValue("@tienDichVu", dv.TienDichVu);
-                    cmd.Parameters.AddWithValue("@maDichVuOld", maDichVuOld);
                     try
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
-                        con.Close();
-                        con.Dispose();
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return false;
+                        throw new Exception("Lỗi khi sửa dịch vụ: " + ex.Message);
                     }
                 }
-
-                return true;
             }
         }
+
         public bool xoa(dichvuDTO dv)
         {
-            string query = string.Empty;
-            query += "delete from [DichVu]";
-            query += "where maDichVu=@maDichVu";
-
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand("sp_XoaDichVu", con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@maDichVu", dv.MaDichVu);
                     try
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
-                        con.Close();
-                        con.Dispose();
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return false;
+                        throw new Exception("Lỗi khi xóa dịch vụ: " + ex.Message);
                     }
                 }
-
-                return true;
             }
         }
+
         public List<dichvuDTO> select()
         {
-            string query = string.Empty;
-            query += "SELECT * ";
-            query += "FROM [DichVu]";
-
             List<dichvuDTO> lsDichVu = new List<dichvuDTO>();
+            string query = "SELECT * FROM v_DanhSachDichVu"; // Sử dụng View
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
-
+                    cmd.CommandType = CommandType.Text;
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = null;
-                        reader = cmd.ExecuteReader();
-                        if (reader.HasRows == true)
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 dichvuDTO dv = new dichvuDTO();
-                                dv.MaDichVu = (reader["maDichVu"].ToString());
+                                dv.MaDichVu = int.Parse(reader["maDichVu"].ToString());
                                 dv.TenDichVu = reader["tenDichVu"].ToString();
                                 dv.TienDichVu = float.Parse(reader["tienDichVu"].ToString());
-
                                 lsDichVu.Add(dv);
-
                             }
                         }
-
-                        con.Close();
-                        con.Dispose();
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return null;
+                        throw new Exception("Lỗi khi tải danh sách dịch vụ: " + ex.Message);
                     }
                 }
             }
             return lsDichVu;
         }
+
         public List<dichvuDTO> selectByKeyWord(string sKeyword)
         {
-            string query = string.Empty;
-            query += " SELECT * ";
-            query += " FROM [DichVu]";
-            query += " WHERE ([maDichVu] LIKE CONCAT('%',@sKeyword,'%'))";
-            query += " OR ([tenDichVu] LIKE CONCAT('%',@sKeyword,'%'))";
-
             List<dichvuDTO> lsDichVu = new List<dichvuDTO>();
+            string query = "SELECT * FROM v_DanhSachDichVu WHERE tenDichVu LIKE @key"; // Sử dụng View
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
-                    cmd.Parameters.AddWithValue("@sKeyword", sKeyword);
+                    cmd.Parameters.AddWithValue("@key", "%" + sKeyword + "%");
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = null;
-                        reader = cmd.ExecuteReader();
-                        if (reader.HasRows == true)
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 dichvuDTO dv = new dichvuDTO();
-                                dv.MaDichVu = (reader["maDichVu"].ToString());
+                                dv.MaDichVu = int.Parse(reader["maDichVu"].ToString());
                                 dv.TenDichVu = reader["tenDichVu"].ToString();
                                 dv.TienDichVu = float.Parse(reader["tienDichVu"].ToString());
-
                                 lsDichVu.Add(dv);
-
                             }
                         }
-
-                        con.Close();
-                        con.Dispose();
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return null;
+                        throw new Exception("Lỗi khi tìm kiếm dịch vụ: " + ex.Message);
                     }
                 }
             }
             return lsDichVu;
         }
 
-        public string autogenerate_madv()
-        {
-            int mathuoc = 1;
-            string query = string.Empty;
-            query += "SELECT MAX (KQ.MADICHVU) AS MM from (SELECT CONVERT(float, DichVu.maDichVu) AS MADICHVU FROM DichVu) AS KQ";
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
-            {
-
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
-
-                    try
-                    {
-                        con.Open();
-                        SqlDataReader reader = null;
-                        reader = cmd.ExecuteReader();
-                        if (reader.HasRows == true)
-                        {
-                            while (reader.Read())
-                            {
-                                mathuoc =int.Parse(reader["MM"].ToString()) + 1;
-                            }
-                        }
-
-                        con.Close();
-                        con.Dispose();
-                    }
-                    catch (Exception ex)
-                    {
-                        con.Close();
-                    }
-                }
-            }
-            return mathuoc.ToString();
-
-        }
     }
 }

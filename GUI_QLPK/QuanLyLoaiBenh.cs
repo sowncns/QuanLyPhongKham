@@ -20,7 +20,7 @@ namespace GUI_QLPK
         BenhBUS beBus = new BenhBUS();
         benhDTO be = new benhDTO();
 
-        private string temp;
+        private int temp;
         public QuanLyLoaiBenh()
         {
             InitializeComponent();
@@ -38,7 +38,7 @@ namespace GUI_QLPK
             List<benhDTO> listBenh = beBus.select();
             this.loadData_Vao_GridView(listBenh);
             tenBenh.Text = " ";
-            maBenh.Text = beBus.autogenerate_mabenh().ToString();
+            //maBenh.Text = beBus.autogenerate_mabenh().ToString();
 
         }
         private void loadData_Vao_GridView(List<benhDTO> listBenh)
@@ -50,7 +50,7 @@ namespace GUI_QLPK
                 return;
             }
             DataTable table = new DataTable();
-            table.Columns.Add("Mã bệnh", typeof(string));
+            table.Columns.Add("Mã bệnh", typeof(int));
             table.Columns.Add("Tên Bệnh", typeof(string));
             foreach (benhDTO be in listBenh)
             {
@@ -87,17 +87,11 @@ namespace GUI_QLPK
             }
             else
             {
-                // Kiểm tra trùng tên bệnh
-                if (beBus.kiemTraTrungTen(tenBenh.Text.Trim()))
-                {
-                    System.Windows.Forms.MessageBox.Show("Tên bệnh đã tồn tại. Vui lòng nhập lại", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                    tenBenh.Focus();
-                    return;
-                }
+               
                 benhDTO be = new benhDTO();
                 be.TenBenh = tenBenh.Text;
 
-                bool kq = beBus.them(be);
+                bool kq = beBus.ThemBenh(be);
                 if (!kq)
                     System.Windows.Forms.MessageBox.Show("Thêm bệnh thất bại. Vui lòng kiểm tra lại dữ liệu", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 else
@@ -111,10 +105,10 @@ namespace GUI_QLPK
 
         private void Sua_Click(object sender, EventArgs e)
         {
-            be.MaBenh = (maBenh.Text);
+            be.MaBenh = int.Parse(maBenh.Text);
             be.TenBenh = tenBenh.Text;
 
-            bool kq = beBus.sua(be, temp);
+            bool kq = beBus.SuaBenh(be, temp);
             if (!kq)
                 System.Windows.Forms.MessageBox.Show("Cập nhật loại bệnh thất bại. Vui lòng kiểm tra lại dữ liệu", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             else
@@ -129,7 +123,7 @@ namespace GUI_QLPK
         {
             be.MaBenh = (temp);
             beBus = new BenhBUS();
-            bool kq = beBus.xoa(be);
+            bool kq = beBus.XoaBenh(be);
             if (kq == false)
                 System.Windows.Forms.MessageBox.Show("Xóa loại bệnh thất bại. Vui lòng kiểm tra lại dữ liệu", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
@@ -153,7 +147,7 @@ namespace GUI_QLPK
                 DataGridViewRow row = gird.Rows[e.RowIndex];
                 maBenh.Text = row.Cells[0].Value.ToString();
                 tenBenh.Text = row.Cells[1].Value.ToString();
-                temp = row.Cells[0].Value.ToString();
+                temp = int.Parse(row.Cells[0].Value.ToString());
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using QLPKDTO;
+using QLPKDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace QLPKDAL
 {
@@ -17,212 +18,169 @@ namespace QLPKDAL
             connectionString = ConfigurationManager.AppSettings["ConnectionString"];
         }
         public string ConnectionString { get => connectionString; set => connectionString = value;}
+
         public bool kethuoc(ChiTietToaThuocDTO kt)
         {
-            string query = string.Empty;
-            query += "INSERT INTO [ChiTietDonThuoc] ([maToaThuoc], [maThuoc],[soLuong])";
-            query += "VALUES (@maToaThuoc,@maThuoc,@soLuong)";
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                // Sử dụng Procedure sp_KeThuocVaoDon
+                using (SqlCommand cmd = new SqlCommand("sp_KeThuocVaoDon", con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
-                    cmd.Parameters.AddWithValue("@maToaThuoc", kt.MaToa);
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@maThuoc", kt.MaThuoc);
+                    cmd.Parameters.AddWithValue("@maToaThuoc", kt.MaToa);
                     cmd.Parameters.AddWithValue("@soLuong", kt.SoLuong);
 
                     try
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
-                        con.Close();
-                        con.Dispose();
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return false;
+                        throw new Exception("Lỗi khi kê thuốc: " + ex.Message);
                     }
                 }
             }
-            return true;
         }
-        public List<ChiTietToaThuocDTO> selectbypkb(string mapkb)
-        {
-            string query = @"
-            SELECT KT.maToaThuoc, KT.maThuoc, KT.soLuong 
-            FROM PhieuKhamBenh PKB 
-            JOIN ToaThuoc T ON PKB.maPKB = T.maPKB 
-            JOIN ChiTietDonThuoc KT ON T.maToaThuoc = KT.maToaThuoc 
-            JOIN Thuoc TH ON KT.maThuoc = TH.maThuoc 
-            WHERE PKB.maPKB = @mapkb";
 
+        public List<ChiTietToaThuocDTO> selectbypkb(int mapkb)
+        {
+            // Sử dụng View v_ChiTietDonThuoc
+            string query = "SELECT maToaThuoc, maThuoc, soLuong FROM v_ChiTietDonThuoc WHERE maPKB = @mapkb";
             List<ChiTietToaThuocDTO> lskethuoc = new List<ChiTietToaThuocDTO>();
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandType = CommandType.Text;
                     cmd.Parameters.AddWithValue("@mapkb", mapkb);
                     try
                     {
                         con.Open();
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            if (reader.HasRows)
+                            while (reader.Read())
                             {
-                                while (reader.Read())
-                                {
-                                    ChiTietToaThuocDTO kt = new ChiTietToaThuocDTO();
-                                    kt.SoLuong = int.Parse(reader["soLuong"].ToString());
-                                    kt.MaToa = (reader["maToaThuoc"].ToString());
-                                    kt.MaThuoc = (reader["maThuoc"].ToString());
-                                    lskethuoc.Add(kt);
-                                }
+                                ChiTietToaThuocDTO kt = new ChiTietToaThuocDTO();
+                                kt.SoLuong = int.Parse(reader["soLuong"].ToString());
+                                kt.MaToa = int.Parse(reader["maToaThuoc"].ToString());
+                                kt.MaThuoc = int.Parse(reader["maThuoc"].ToString());
+                                lskethuoc.Add(kt);
                             }
                         }
-                        con.Close();
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error: {ex.Message}");
-                        con.Close();
-                        return null;
+                        throw new Exception("Lỗi khi lấy chi tiết toa thuốc theo PKB: " + ex.Message);
                     }
                 }
             }
             return lskethuoc;
         }
+
         public List<ChiTietToaThuocDTO> baocaobymonth(string month, string year)
         {
-            string query = string.Empty;
-            //lấy danh sách các loại thuốc và tổng số lượng đã kê trong một tháng/năm
-            query += "SELECT TH.maThuoc, TH.tenThuoc, sum (KT.soLuong) as soLuong FROM ToaThuoc T JOIN ChiTietDonThuoc KT ON T.maToaThuoc=KT.maToaThuoc JOIN Thuoc TH ON KT.maThuoc=TH.maThuoc WHERE MONTH(T.ngayKeToa)=@month and year(T.ngayKeToa)=@year group by TH.maThuoc,TH.tenThuoc";
-
-
             List<ChiTietToaThuocDTO> lskethuoc = new List<ChiTietToaThuocDTO>();
 
+            // Sử dụng Procedure sp_BaoCaoSuDungThuoc
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand("sp_BaoCaoSuDungThuoc", con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
-                    cmd.Parameters.AddWithValue("@month", month);
-                    cmd.Parameters.AddWithValue("@year", year);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@month", int.Parse(month));
+                    cmd.Parameters.AddWithValue("@year", int.Parse(year));
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = null;
-                        reader = cmd.ExecuteReader();
-                        if (reader.HasRows == true)
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 ChiTietToaThuocDTO kt = new ChiTietToaThuocDTO();
                                 kt.SoLuong = int.Parse(reader["soLuong"].ToString());
-                                kt.MaThuoc = (reader["maThuoc"].ToString());
+                                kt.MaThuoc = int.Parse(reader["maThuoc"].ToString());
+                                // DTO có thể không có trường TenThuoc, nếu có thì gán vào.
+                                // Giả sử DTO chỉ cần MaThuoc và SoLuong cho báo cáo.
                                 lskethuoc.Add(kt);
-
                             }
                         }
-
-                        con.Close();
-                        con.Dispose();
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return null;
+                        throw new Exception("Lỗi khi lấy báo cáo sử dụng thuốc: " + ex.Message);
                     }
                 }
             }
             return lskethuoc;
         }
-        public int solandungbymonth(string mathuoc, string month, string year)
+
+        public int solandungbymonth(int mathuoc, string month, string year)
         {
             int SLD = 0;
-            string query = string.Empty;
-            //số lần thuốc đc kê trong tháng/năm
-            query += "SELECT  count (KT.maToaThuoc) as SLD FROM ToaThuoc T JOIN ChiTietDonThuoc KT ON T.maToaThuoc=KT.maToaThuoc JOIN Thuoc TH ON KT.maThuoc=TH.maThuoc WHERE MONTH(T.ngayKeToa)=@month and year(T.ngayKeToa)=@year and TH.maThuoc=@mathuoc";
-
-
+            // Sử dụng Procedure sp_DemSoLanKeThuoc
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand("sp_DemSoLanKeThuoc", con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
-                    cmd.Parameters.AddWithValue("@month", month);
-                    cmd.Parameters.AddWithValue("@year", year);
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@mathuoc", mathuoc);
+                    cmd.Parameters.AddWithValue("@month", int.Parse(month));
+                    cmd.Parameters.AddWithValue("@year", int.Parse(year));
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = null;
-                        reader = cmd.ExecuteReader();
-                        if (reader.HasRows == true)
+                        object result = cmd.ExecuteScalar();
+                        if (result != null)
                         {
-                            while (reader.Read())
-                            {
-                                SLD = int.Parse(reader["SLD"].ToString());
-                            }
+                            SLD = Convert.ToInt32(result);
                         }
-
-                        con.Close();
-                        con.Dispose();
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return 0;
+                        throw new Exception("Lỗi khi đếm số lần kê thuốc: " + ex.Message);
                     }
                 }
             }
             return SLD;
         }
+
         public List<ChiTietToaThuocDTO> selectByDate(DateTime ngay)
         {
             List<ChiTietToaThuocDTO> list = new List<ChiTietToaThuocDTO>();
+            // Sử dụng View v_ChiTietDonThuoc
+            string query = "SELECT maThuoc, maToaThuoc, soLuong FROM v_ChiTietDonThuoc WHERE CAST(ngayKeToa AS DATE) = @ngay";
 
-            string query = @"
-                        SELECT CT.maThuoc, CT.maToaThuoc, CT.soLuong
-                        FROM ChiTietDonThuoc CT
-                        INNER JOIN ToaThuoc TT ON CT.maToaThuoc = TT.maToaThuoc
-                        WHERE CAST(TT.ngayKeToa AS DATE) = @ngay";
-
-
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@ngay", ngay.Date);
-
-                con.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    ChiTietToaThuocDTO kt = new ChiTietToaThuocDTO();
-                    kt.SoLuong = int.Parse(reader["soLuong"].ToString());
-                    kt.MaToa = (reader["maToaThuoc"].ToString());
-                    kt.MaThuoc = (reader["maThuoc"].ToString());
-
-                    list.Add(kt);
+                    cmd.Parameters.AddWithValue("@ngay", ngay.Date);
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ChiTietToaThuocDTO kt = new ChiTietToaThuocDTO();
+                                kt.SoLuong = int.Parse(reader["soLuong"].ToString());
+                                kt.MaToa = int.Parse(reader["maToaThuoc"].ToString());
+                                kt.MaThuoc = int.Parse(reader["maThuoc"].ToString());
+                                list.Add(kt);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Lỗi khi lấy chi tiết toa thuốc theo ngày: " + ex.Message);
+                    }
                 }
-
-                reader.Close();
             }
-
             return list;
         }
-
     }
 }

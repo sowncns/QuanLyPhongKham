@@ -1,4 +1,4 @@
-﻿using QLPKDAL;
+using QLPKDAL;
 using QLPKDTO;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace QLPKBUS
             bool re = thDAL.them(th);
             return re;
         }
-        public bool sua(thuocDTO th, string maThuocold)
+        public bool sua(thuocDTO th, int maThuocold)
         {
             bool re = thDAL.sua(th, maThuocold);
             return re;
@@ -38,13 +38,9 @@ namespace QLPKBUS
         {
             return thDAL.selectByKeyWord(sKeyword);
         }
-        public List<thuocDTO> selectbypkb(string mapkb)
+        public List<thuocDTO> selectbypkb(int mapkb)
         {
             return thDAL.selectbypkb(mapkb);
-        }
-        public  string autogenerate_mathuoc()
-        {
-            return thDAL.autogenerate_mathuoc();
         }
         public List<thuocDTO> baocaobymonth(string month, string year)
         {
@@ -54,7 +50,7 @@ namespace QLPKBUS
         {
             return thDAL.KiemTraTenThuocDaTonTai(tenThuoc);
         }
-        public bool truSoLuong(string maThuoc, int soLuong)
+        public bool truSoLuong(int maThuoc, int soLuong)
         {
             return thDAL.truSoLuong(maThuoc, soLuong);
         }

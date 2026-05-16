@@ -8,9 +8,9 @@ namespace QLPKDTO
 {
     public class cachdungDTO
     {
-        private string maCachDung;
+        private int maCachDung;
         private string tenCachDung;
-        public string MaCachDung { get { return maCachDung; } set { maCachDung = value; } }
+        public int MaCachDung { get { return maCachDung; } set { maCachDung = value; } }
         public string TenCachDung { get { return tenCachDung; } set { tenCachDung = value; } }
     }
 }

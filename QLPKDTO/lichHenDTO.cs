@@ -8,17 +8,17 @@ namespace QLPKDTO
 {
     public class lichHenDTO
     {
-        private string maLichHen;
-        private string maBenhNhan;
-        private string maTaiKhoan; //cua benh nhan
+        private int maLichHen;
+        private int maBenhNhan;
+        private int maTaiKhoan; //cua benh nhan
         private DateTime ngayHen;
         private string trangThai;
-        private string maDieuDuong;
-        public string MaLichHen { get => maLichHen; set => maLichHen = value; }
-        public string MaBenhNhan { get => maBenhNhan; set => maBenhNhan = value; }
-        public string MaTaiKhoan { get => maTaiKhoan; set => maTaiKhoan = value; }
+        private int maDieuDuong;
+        public int MaLichHen { get => maLichHen; set => maLichHen = value; }
+        public int MaBenhNhan { get => maBenhNhan; set => maBenhNhan = value; }
+        public int MaTaiKhoan { get => maTaiKhoan; set => maTaiKhoan = value; }
         public DateTime NgayHen { get => ngayHen; set => ngayHen = value; }
         public string TrangThai { get => trangThai; set => trangThai = value; }
-        public string MaDieuDuong { get => maDieuDuong; set => maDieuDuong = value; }
+        public int MaDieuDuong { get => maDieuDuong; set => maDieuDuong = value; }
     }
 }

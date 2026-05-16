@@ -1,4 +1,4 @@
-﻿using QLPKDTO;
+using QLPKDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,178 +22,151 @@ namespace QLPKDAL
 
         public List<lichHenDTO> select()
         {
-            string query = "SELECT * FROM [LichHen]"; //lấy all lịch hẹn
+            // Sử dụng View v_DanhSachLichHen
+            string query = "SELECT * FROM v_DanhSachLichHen"; 
             List<lichHenDTO> lslichHen = new List<lichHenDTO>();
 
-            using (SqlConnection con = new SqlConnection(ConnectionString)) //khởi tạo kết nối csdl
+            using (SqlConnection con = new SqlConnection(ConnectionString)) 
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = cmd.ExecuteReader(); //đọc dl từng dòng
-
-                        while (reader.Read())
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            lichHenDTO lh = new lichHenDTO();
-                            lh.MaLichHen = reader["maLichHen"].ToString();
-                            lh.MaBenhNhan = reader["maBenhNhan"].ToString();
-                            lh.MaTaiKhoan = reader["maTaiKhoan"].ToString();
-                            lh.MaDieuDuong = (reader["maDieuDuong"].ToString());
-                            lh.NgayHen = DateTime.Parse(reader["ngayHen"].ToString());
-                            lh.TrangThai = reader["trangThai"].ToString();
-                            lslichHen.Add(lh);
+                            while (reader.Read())
+                            {
+                                lichHenDTO lh = new lichHenDTO();
+                                lh.MaLichHen = int.Parse(reader["maLichHen"].ToString());
+                                lh.MaBenhNhan = int.Parse(reader["maBenhNhan"].ToString());
+                                lh.MaTaiKhoan = int.Parse(reader["maTaiKhoan"].ToString());
+                                lh.MaDieuDuong = int.Parse(reader["maDieuDuong"].ToString());
+                                lh.NgayHen = DateTime.Parse(reader["ngayHen"].ToString());
+                                lh.TrangThai = reader["trangThai"].ToString();
+                                lslichHen.Add(lh);
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        throw new Exception("Lỗi khi tải danh sách lịch hẹn: " + ex.Message);
                     }
                 }
             }
             return lslichHen;
         }
+
         public bool them(lichHenDTO lh)
         {
-            string query = string.Empty;
-            query = "INSERT INTO [LichHen] (maBenhNhan, maTaiKhoan, ngayHen, trangThai, maDieuDuong) VALUES (@maBenhNhan, @maTaiKhoan, @ngayHen, @trangThai, @maDieuDuong)";
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                // Gọi Stored Procedure sp_ThemLichHen
+                using (SqlCommand cmd = new SqlCommand("sp_ThemLichHen", con))
                 {
-                    cmd.Parameters.AddWithValue("@maBenhNhan", lh.MaBenhNhan);
-                    cmd.Parameters.AddWithValue("@maTaiKhoan", lh.MaTaiKhoan);
-                    cmd.Parameters.AddWithValue("@maDieuDuong", lh.MaDieuDuong);
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ngayHen", lh.NgayHen);
-                    cmd.Parameters.AddWithValue("@trangThai", lh.TrangThai);
-                    try
-                    {
-                        con.Open();
-                        cmd.ExecuteNonQuery(); //chạy sql insert
-                        con.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        con.Close();
-                        Console.WriteLine(ex.Message);
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        //tự động tạo mã lịch hẹn
-        public string AutoGenerateMaLichHen()
-        {
-            int maLichHen = 1;
-            string query = "";
-            query += "SELECT  MAX(CAST(maLichHen AS INT)) AS MaxMaLH FROM[LichHen]";
+                    cmd.Parameters.AddWithValue("@maTaiKhoan", lh.MaTaiKhoan);
+                    cmd.Parameters.AddWithValue("@maBenhNhan", lh.MaBenhNhan);
+                    cmd.Parameters.AddWithValue("@maDieuDuong", lh.MaDieuDuong);
+                    // Procedure sp_ThemLichHen trong file 05_procedures.sql không có tham số @trangThai
+                    // Nó dùng mặc định là N'Chờ khám'. Nếu cần truyền, cần cập nhật Procedure.
+                    // Giả sử dùng mặc định của Procedure.
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = cmd.ExecuteReader();
-                        if (reader.Read() && !reader.IsDBNull(0)) //kiểm tra xem có giá trị nào trong cột MaxMaLH không
-                        {
-                            maLichHen = int.Parse(reader["MaxMaLH"].ToString()) + 1;
-                        }
+                        cmd.ExecuteNonQuery();
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        throw new Exception("Lỗi khi thêm lịch hẹn: " + ex.Message);
                     }
                 }
             }
-            return maLichHen.ToString();
         }
+
+
+
         public bool xoa(lichHenDTO lh)
         {
-            string query = string.Empty;
-            query += "delete from [LichHen]"; //câu lệnh xóa
-            query += "where maLichHen=@maLichHen";
+            string query = "DELETE FROM LichHen WHERE maLichHen = @maLichHen";
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@maLichHen", lh.MaLichHen);
                     try
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
-                        con.Close();
-                        con.Dispose(); //giải phóng
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return false;
+                        throw new Exception("Lỗi khi xóa lịch hẹn: " + ex.Message);
                     }
                 }
-
-                return true;
             }
         }
 
-        public bool CapNhatTrangThai(string maBenhNhan,string trangThaiMoi)
+        public bool CapNhatTrangThai(int maBenhNhan, string trangThaiMoi) // Changed parameter to int
         {
+            // Cập nhật theo mã bệnh nhân như code cũ của bạn
             string query = "UPDATE LichHen SET trangThai = @trangThaiMoi WHERE maBenhNhan = @maBenhNhan";
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@trangThaiMoi", trangThaiMoi);
                 cmd.Parameters.AddWithValue("@maBenhNhan", maBenhNhan);
-             
 
                 try
                 {
                     con.Open();
                     return cmd.ExecuteNonQuery() > 0;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return false;
+                    throw new Exception("Lỗi khi cập nhật trạng thái lịch hẹn: " + ex.Message);
                 }
             }
         }
-        //lấy ds lịch hẹn theo ngày
+
         public List<lichHenDTO> selectByDate(DateTime ngay)
         {
-            string query = "SELECT * FROM LichHen WHERE CAST(NgayHen AS DATE) = @ngay";
+            string query = "SELECT * FROM LichHen WHERE CAST(ngayHen AS DATE) = @ngay";
             List<lichHenDTO> ds = new List<lichHenDTO>();
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@ngay", ngay.Date);
-                con.Open();
-                SqlDataReader reader = cmd.ExecuteReader(); //thực thi truy vấn và lấy dữ liệu
-
-                while (reader.Read())
+                try
                 {
-                    lichHenDTO lh = new lichHenDTO();
-                    lh.MaLichHen = reader["maLichHen"].ToString();
-                    lh.MaBenhNhan = reader["maBenhNhan"].ToString();
-                    lh.MaTaiKhoan = reader["maTaiKhoan"].ToString();
-                    lh.MaDieuDuong = (reader["maDieuDuong"].ToString());
-                    lh.NgayHen = DateTime.Parse(reader["ngayHen"].ToString());
-                    lh.TrangThai = reader["trangThai"].ToString();
-                    ds.Add(lh);
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lichHenDTO lh = new lichHenDTO();
+                            lh.MaLichHen = int.Parse(reader["maLichHen"].ToString());
+                            lh.MaBenhNhan = int.Parse(reader["maBenhNhan"].ToString());
+                            lh.MaTaiKhoan = int.Parse(reader["maTaiKhoan"].ToString());
+                            lh.MaDieuDuong = int.Parse(reader["maDieuDuong"].ToString());
+                            lh.NgayHen = DateTime.Parse(reader["ngayHen"].ToString());
+                            lh.TrangThai = reader["trangThai"].ToString();
+                            ds.Add(lh);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Lỗi khi lấy lịch hẹn theo ngày: " + ex.Message);
                 }
             }
-
             return ds;
         }
-  
-
     }
 }

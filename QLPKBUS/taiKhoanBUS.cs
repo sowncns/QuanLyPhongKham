@@ -1,4 +1,4 @@
-﻿using QLPKDAL;
+using QLPKDAL;
 using QLPKDTO;
 using System;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace QLPKBUS
             else return false;
           
         }
-        public bool sua(taiKhoanDTO tk, string maTaiKhoanold)
+        public bool sua(taiKhoanDTO tk, int maTaiKhoanold)
         {
             bool re = tkDAL.sua(tk, maTaiKhoanold);
             return re;
@@ -40,10 +40,6 @@ namespace QLPKBUS
         public List<taiKhoanDTO> select()
         {
             return tkDAL.select();
-        }
-        public string autogenerate_maTaiKhoan()
-        {
-            return tkDAL.autogenerate_maTaiKhoan();
         }
 
         public List<taiKhoanDTO> selectByKeyWord(string sKeyword)

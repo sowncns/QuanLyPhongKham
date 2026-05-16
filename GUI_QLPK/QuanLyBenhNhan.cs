@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDTO;
 using System;
 using System.Collections.Generic;
@@ -18,9 +18,9 @@ namespace GUI_QLPK
         BenhNhanBUS bnBus = new BenhNhanBUS();
         BenhNhanDTO bn = new BenhNhanDTO();
         PhieukhambenhBUS pkbBUS = new PhieukhambenhBUS();
-        private string temp_ma; //lưu mabn
-        private string maloai;
-        public QuanLyBenhNhan( string maloaiTk)
+        private int temp_ma; //lưu mabn
+        private int maloai;
+        public QuanLyBenhNhan( int maloaiTk)
         {
             InitializeComponent();
             maloai = maloaiTk;
@@ -30,7 +30,7 @@ namespace GUI_QLPK
         }
         private void kiemtraquyen()
         {
-            if (maloai == "3") // Nếu là nhân viên lễ tân   
+            if (maloai == 3) // Nếu là nhân viên lễ tân   
             {
                 xoa.Enabled = false;               
             }
@@ -75,7 +75,7 @@ namespace GUI_QLPK
             foreach (BenhNhanDTO bn in listBenhNhan)
             {
                 DataRow row = table.NewRow();
-                row["Mã bệnh nhân"] = int.Parse(bn.MaBN.ToString());
+                row["Mã bệnh nhân"] = bn.MaBN;
                 row["Tên bệnh nhân"] = bn.TenBN;
                 row["Ngày sinh"] = DateTime.Parse(bn.NgsinhBN.ToString()).ToString("yyyy-MM-dd");
                 row["Địa chỉ"] = bn.DiachiBN;
@@ -124,7 +124,7 @@ namespace GUI_QLPK
                 gioitinh.Text = row.Cells[4].Value?.ToString();
                 macccd.Text = row.Cells[5].Value?.ToString();
                 email.Text = row.Cells[6].Value?.ToString();
-                temp_ma = row.Cells[0].Value?.ToString();
+                temp_ma = int.Parse(row.Cells[0].Value?.ToString());
             }
         }
 
@@ -188,7 +188,7 @@ namespace GUI_QLPK
             gioitinh.Text = string.Empty;
             diachi.Text = string.Empty;
             macccd.Text = string.Empty;
-            temp_ma = string.Empty;
+            temp_ma = 0;
             email.Text = string.Empty;
             load_data();
         }

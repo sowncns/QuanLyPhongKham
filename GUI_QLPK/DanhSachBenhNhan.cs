@@ -1,4 +1,4 @@
-﻿using QLPKBUS;
+using QLPKBUS;
 using QLPKDAL;
 using QLPKDTO;
 using System;
@@ -57,7 +57,7 @@ namespace GUI_QLPK
             listpkb.Sort((x, y) =>(x.MaPKB).CompareTo(y.MaPKB));
             DataTable table = new DataTable();
             table.Columns.Add("Số thứ tự", typeof(int));
-            table.Columns.Add("Mã phiếu khám", typeof(string));
+            table.Columns.Add("Mã phiếu khám", typeof(int));
             table.Columns.Add("Tên bệnh nhân", typeof(string));
             table.Columns.Add("CCCD", typeof(string));
             table.Columns.Add("Ngày khám", typeof(string));
@@ -72,12 +72,12 @@ namespace GUI_QLPK
                         join be in listBenh on cd.MaBenh equals be.MaBenh
                         join tk in listTK on pkb.MBS equals tk.MaTK
                         select new { pkb, bn, be, tk };
-            HashSet<string> dsMaPKB = new HashSet<string>();
+            HashSet<int> dsMaPKB = new HashSet<int>();
 
 
             foreach (var item in query)
             {
-                if (!dsMaPKB.Contains(item.pkb.MaPKB.ToString()))
+                if (!dsMaPKB.Contains(item.pkb.MaPKB))
                 {
                     DataRow row = table.NewRow();
                     row["Số thứ tự"] = stt++;
@@ -93,7 +93,7 @@ namespace GUI_QLPK
                     row["Bác sĩ khám"] = item.tk.Name;
 
                     table.Rows.Add(row);
-                    dsMaPKB.Add(item.pkb.MaPKB.ToString());
+                    dsMaPKB.Add(item.pkb.MaPKB);
                 }
             }
             gird.DataSource = table.DefaultView;

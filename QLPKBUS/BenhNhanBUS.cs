@@ -1,4 +1,4 @@
-﻿using QLPKDAL;
+using QLPKDAL;
 using QLPKDTO;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,7 @@ namespace QLPKBUS
     public class BenhNhanBUS
     {
         private BenhNhanDAL bnDAL;
+
         public BenhNhanBUS()
         {
             bnDAL = new BenhNhanDAL();
@@ -20,7 +21,7 @@ namespace QLPKBUS
             bool re = bnDAL.Them(bn);
             return re;
         }
-        public bool sua(BenhNhanDTO bn, string maBNold)
+        public bool sua(BenhNhanDTO bn, int maBNold)
         {
             bool re = bnDAL.Sua(bn, maBNold);
             return re;
@@ -38,10 +39,5 @@ namespace QLPKBUS
         {
             return bnDAL.SelectByKeyWord(sKeyword);
         }
-        public string autogenerate_mabn()
-        {
-            return bnDAL.AutoGenerateMaBN();
-        }
-
     }
 }

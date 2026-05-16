@@ -1,7 +1,8 @@
-﻿using QLPKDTO;
+using QLPKDTO;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,45 +24,31 @@ namespace QLPKDAL
         }
         public List<loaiTaiKhoanDTO> select()
         {
-            string query = string.Empty;
-            query += "SELECT * ";
-            query += "FROM [Roles]";
-
             List<loaiTaiKhoanDTO> lsloaitk = new List<loaiTaiKhoanDTO>();
+            string query = "SELECT * FROM v_DanhSachRoles"; // Sử dụng View
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-
-                using (SqlCommand cmd = new SqlCommand())
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Connection = con;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = query;
-
+                    cmd.CommandType = CommandType.Text;
                     try
                     {
                         con.Open();
-                        SqlDataReader reader = null;
-                        reader = cmd.ExecuteReader();
-                        if (reader.HasRows == true)
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 loaiTaiKhoanDTO loaitk = new loaiTaiKhoanDTO();
                                 loaitk.TenLoaiTaiKhoan = reader["tenRole"].ToString();
-                                loaitk.MaRole =(reader["maRole"].ToString());
-
+                                loaitk.MaRole = int.Parse(reader["maRole"].ToString());
                                 lsloaitk.Add(loaitk);
                             }
                         }
-
-                        con.Close();
-                        con.Dispose();
                     }
                     catch (Exception ex)
                     {
-                        con.Close();
-                        return null;
+                        throw new Exception("Lỗi khi tải danh sách loại tài khoản: " + ex.Message);
                     }
                 }
             }
