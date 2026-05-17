@@ -1,4 +1,3 @@
-
 using QLPKDTO;
 using QLPKBUS;
 using System;
@@ -16,7 +15,7 @@ namespace GUI_QLPK
 {
     public partial class ThemPhieuKhamBenh : Form
     {
-        public int   maBS;
+        public int maBS;
         BenhNhanBUS bnBUS = new BenhNhanBUS();
         BenhBUS beBus = new BenhBUS();
         ChandoanBUS cdBUS = new ChandoanBUS();
@@ -24,7 +23,9 @@ namespace GUI_QLPK
         lichHenBUS lhBUS = new lichHenBUS();
         lichHenDAL lichHenDAL = new lichHenDAL();
 
-        private int stt;
+        private int _maPKBVuaLap = -1;
+        private int _maBNVuaLap = -1;
+        private int _maLichHen = -1;
 
         public ThemPhieuKhamBenh(int mabs)
         {
@@ -34,164 +35,158 @@ namespace GUI_QLPK
             gird.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             Load_Gird();
             load_data();
-
+            btnKeToa.Enabled = false;
+            btnKeToa.Visible = false;
         }
-        // load dữ liệu mặc định cho phiếu khám bệnh
+
         public void load_data()
         {
             maPKB.Text = "Tự động";
             mabenhnhan.Text = "";
             hoten.Text = "";
             trieuchung.Text = "";
+            ngaytaikham.Checked = false;
             ngaytaikham.Value = DateTime.Now.AddDays(7);
-
         }
+
         private void load_combobox_benh()
         {
             checkedListBoxBenh.Items.Clear();
-
             List<benhDTO> listBenh = beBus.select();
-
             foreach (benhDTO be in listBenh)
             {
                 checkedListBoxBenh.Items.Add(be.TenBenh);
             }
         }
-        // load tên bệnh nhân theo mã bệnh nhân
+
         private void load_ten(List<BenhNhanDTO> listBenhNhan, int mabn)
         {
             if (listBenhNhan == null)
             {
-                System.Windows.Forms.MessageBox.Show("Có lỗi khi lấy thông tin từ DB", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                MessageBox.Show("Có lỗi khi lấy thông tin từ hệ thống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            foreach (BenhNhanDTO bn in listBenhNhan)
+            var benhNhan = listBenhNhan.FirstOrDefault(bn => bn.MaBN == mabn);
+            if (benhNhan != null)
             {
-                if (bn.MaBN == mabn)
-                {
-                    hoten.Text = bn.TenBN;
-
-                }
+                hoten.Text = benhNhan.TenBN;
             }
         }
 
-
-        private void loadData_Vao_comboboxbe(List<benhDTO> listBenh)
-        {
-
-            if (listBenh == null)
-            {
-                System.Windows.Forms.MessageBox.Show("Có lỗi khi lấy thông tin bệnh từ DB", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                return;
-
-            }
-            foreach (benhDTO be in listBenh)
-            {
-                checkedListBoxBenh.Items.Clear();
-
-
-
-                foreach (benhDTO benh in listBenh)
-                {
-                    checkedListBoxBenh.Items.Add(benh.TenBenh);
-                }
-            }
-        }
         private void btnLapphieu_Click(object sender, EventArgs e)
         {
-            if (maPKB.Text == null || trieuchung.Text == null)
+            if (string.IsNullOrWhiteSpace(trieuchung.Text))
             {
-                System.Windows.Forms.MessageBox.Show("Vui lòng nhập đầy đủ thông tin phiếu khám bệnh");
-            }
-            //kiểm tra ràng buộc
-
-            DateTime ngayTaiKham = ngaytaikham.Value.Date;
-
-            if (ngayTaiKham < DateTime.Today)
-            {
-                MessageBox.Show("Ngày tái khám không hợp lệ");
+                MessageBox.Show("Vui lòng nhập triệu chứng", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            phieukhambenhDTO pkb = new phieukhambenhDTO();
-            chandoanDTO cd = new chandoanDTO();
 
+            if (string.IsNullOrWhiteSpace(mabenhnhan.Text))
+            {
+                MessageBox.Show("Vui lòng chọn bệnh nhân", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DateTime? ngayTaiKhamValue = null;
+            if (ngaytaikham.Checked)
+            {
+                DateTime ngayTaiKham = ngaytaikham.Value.Date;
+                if (ngayTaiKham <= DateTime.Today)
+                {
+                    MessageBox.Show("Ngày tái khám phải sau ngày hôm nay", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                ngayTaiKhamValue = ngayTaiKham;
+            }
+
+            phieukhambenhDTO pkb = new phieukhambenhDTO();
             List<benhDTO> listBenh = beBus.select();
-            pkb.NgayKham = DateTime.UtcNow.Date;
-            pkb.TrieuChung = trieuchung.Text;
+
+            pkb.NgayKham = DateTime.Now.Date; // Dùng DateTime.Now thay vì UtcNow để đồng bộ thời gian thực tại VN
+            pkb.TrieuChung = trieuchung.Text.Trim();
             pkb.MaBenhNhan = int.Parse(mabenhnhan.Text);
-            pkb.NgayTaiKham = ngaytaikham.Value.Date;
+            pkb.NgayTaiKham = ngayTaiKhamValue ?? DateTime.Today.AddYears(1);
             pkb.MBS = maBS;
-            bool ADDPKB = pkbBUS.them(pkb); //lưu phiếu
-    
-           
+
+            // Thực hiện thêm phiếu khám
+            bool ADDPKB = pkbBUS.them(pkb);
+            // LƯU Ý: Đảm bảo pkbBUS.them(pkb) nạp lại ID tự tăng vào pkb.MaPKB sau khi insert thành công.
+
             bool loiChanDoan = false;
             bool coBenhDuocChon = false;
-            foreach (var item in checkedListBoxBenh.CheckedItems)
+            bool laBenhKhongBenh = false;
+
+            if (ADDPKB)
             {
-                string tenBenh = item.ToString();
-
-                var benhTimDuoc = listBenh
-                    .FirstOrDefault(x => x.TenBenh == tenBenh);
-
-                if (benhTimDuoc != null)
+                chandoanDTO cd = new chandoanDTO();
+                foreach (var item in checkedListBoxBenh.CheckedItems)
                 {
-                    coBenhDuocChon = true;
+                    string tenBenh = item.ToString();
+                    var benhTimDuoc = listBenh.FirstOrDefault(x => x.TenBenh == tenBenh);
 
-
-                    cd.MaPkb = pkb.MaPKB;
-                    cd.MaBenh = benhTimDuoc.MaBenh;
-                    cd.TenChuanDoan = benhTimDuoc.TenBenh;
-                    cd.TrieuChung = trieuchung.Text.Trim();
-
-                    bool kqCD = cdBUS.them(cd);
-
-                    if (!kqCD)
+                    if (benhTimDuoc != null)
                     {
-                        loiChanDoan = true;
-                        break;
+                        coBenhDuocChon = true;
+
+                        if (tenBenh.Trim().ToLower() == "không bị bệnh")
+                            laBenhKhongBenh = true;
+
+                        cd.MaPkb = pkb.MaPKB;
+                        cd.MaBenh = benhTimDuoc.MaBenh;
+                        cd.TenChuanDoan = benhTimDuoc.TenBenh;
+                        cd.TrieuChung = trieuchung.Text.Trim();
+
+                        bool kqCD = cdBUS.them(cd);
+                        if (!kqCD)
+                        {
+                            loiChanDoan = true;
+                            break;
+                        }
                     }
                 }
             }
 
-            
-
-
-            if (!loiChanDoan == true && ADDPKB == true)
+            if (!loiChanDoan && ADDPKB)
             {
-                // Cập nhật trạng thái lịch hẹn thành 'Đã khám'
-                int maBN = int.Parse(mabenhnhan.Text);
+                _maPKBVuaLap = pkb.MaPKB;
+                _maBNVuaLap = pkb.MaBenhNhan;
 
+                if (!coBenhDuocChon || laBenhKhongBenh)
+                {
+                    // Không bệnh → Đã khám, ẩn nút kê toa
+                    lhBUS.CapNhatTrangThai(_maLichHen, "Đã khám");
+                    btnKeToa.Visible = false;
+                    btnKeToa.Enabled = false;
+                }
+                else
+                {
+                    // Có bệnh → Chờ kê thuốc, hiện nút kê toa
+                    lhBUS.CapNhatTrangThai(_maLichHen, "Chờ kê thuốc");
+                    btnKeToa.Visible = true;
+                    btnKeToa.Enabled = true;
+                    btnLapphieu.Visible = false;
+                    btnLapphieu.Enabled = false;
+                }
 
-                lhBUS.CapNhatTrangThai(maBN, "Đã khám");
-
-
-                System.Windows.Forms.MessageBox.Show("Lập phiếu thành công", "Result");
-                load_data();
+                MessageBox.Show("Lập phiếu thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Load_Gird();
             }
-            else System.Windows.Forms.MessageBox.Show("Lập phiếu thất bại", "Result", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            else
+            {
+                MessageBox.Show("Lập phiếu thất bại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
         public void Load_Gird()
         {
             int stt = 1;
-
-            List<BenhNhanDTO> listBenhNhan = bnBUS.select(); //lấy ds bệnh nhân
-            List<lichHenDTO> listLichHen = lhBUS.select(); //lấy ds lịch hẹn
-            int mabs = maBS; //mabn hiện tại
-            List<lichHenDTO> lhbacsi = new List<lichHenDTO>();
-            //lọc lịch hẹn của bác sĩ đang đăng nhập
-            foreach (lichHenDTO lh in listLichHen)
-            {
-                //hiện trong ngày của bác sĩ 
-                if (lh.MaTaiKhoan == mabs && lh.NgayHen.Date >= DateTime.Today && lh.TrangThai != "Đã khám")
-                {
-                    lhbacsi.Add(lh);
-                }
-
-            }
+            List<BenhNhanDTO> listBenhNhan = bnBUS.select();
+            List<lichHenDTO> listLichHen = lhBUS.select();
+            List<lichHenDTO> lhbacsi = listLichHen.Where(lh => lh.MaTaiKhoan == maBS && lh.NgayHen.Date >= DateTime.Today).ToList();
 
             DataTable table = new DataTable();
             table.Columns.Add("Số thứ tự", typeof(int));
+            table.Columns.Add("Mã lịch hẹn", typeof(int));
             table.Columns.Add("Mã bệnh nhân", typeof(int));
             table.Columns.Add("Tên bệnh nhân", typeof(string));
             table.Columns.Add("Ngày sinh", typeof(string));
@@ -199,65 +194,156 @@ namespace GUI_QLPK
             table.Columns.Add("Ngày hẹn", typeof(string));
             table.Columns.Add("Giờ hẹn", typeof(string));
             table.Columns.Add("Trạng thái", typeof(string));
-            // dùng HashSet để lưu mã bệnh nhân đang được hiển thị (lưu không trùng)
+
             HashSet<int> dsMaBN = new HashSet<int>();
 
             foreach (BenhNhanDTO bn in listBenhNhan)
             {
                 foreach (lichHenDTO lh in lhbacsi)
                 {
-                    if (bn.MaBN == lh.MaBenhNhan)
+                    if (bn.MaBN == lh.MaBenhNhan && lh.TrangThai != "Đã khám")
                     {
                         DataRow row = table.NewRow();
                         row["Số thứ tự"] = stt;
+                        row["Mã lịch hẹn"] = lh.MaLichHen;
                         row["Mã bệnh nhân"] = bn.MaBN;
                         row["Tên bệnh nhân"] = bn.TenBN;
-                        row["Ngày sinh"] = DateTime.Parse(bn.NgsinhBN.ToString()).ToString("dd/MM/yyyy");
+                        row["Ngày sinh"] = Convert.ToDateTime(bn.NgsinhBN).ToString("dd/MM/yyyy");
                         row["Địa chỉ"] = bn.DiachiBN;
                         row["Ngày hẹn"] = lh.NgayHen.ToString("dd/MM/yyyy");
-                        row["Giờ hẹn"] = lh.NgayHen.ToString("hh:mm");
+                        row["Giờ hẹn"] = lh.NgayHen.ToString("HH:mm");
                         row["Trạng thái"] = lh.TrangThai;
                         table.Rows.Add(row);
-                        dsMaBN.Add(bn.MaBN);
-                        stt += 1;
+
+                        if (lh.TrangThai == "Chờ khám")
+                            dsMaBN.Add(bn.MaBN);
+
+                        stt++;
                     }
                 }
             }
+
             gird.DataSource = table.DefaultView;
+
+            gird.RowPrePaint -= gird_RowPrePaint;
+            gird.RowPrePaint += gird_RowPrePaint;
+
             mabenhnhan.Items.Clear();
             foreach (int ma in dsMaBN)
-            {
                 mabenhnhan.Items.Add(ma);
-            }
         }
-        // Sự kiện tự động load thông tin lên
-        private void gird_CellClick(object sender, DataGridViewCellEventArgs e)
+
+        private void gird_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            //Kiểm tra dòng hợp lệ
             if (e.RowIndex >= 0 && e.RowIndex < gird.Rows.Count)
             {
-                //lấy dòng đang click
-                DataGridViewRow row = gird.Rows[e.RowIndex];
-                hoten.Text = row.Cells[2].Value.ToString();
-                mabenhnhan.Text = row.Cells[1].Value.ToString();
-                string ngay = row.Cells[5].Value.ToString();    // "dd/MM/yyyy"
-                string gio = row.Cells[6].Value.ToString();     // "HH:mm"
-                ngaykham.Text = ngay + " " + gio;
+                var cell = gird.Rows[e.RowIndex].Cells["Trạng thái"];
+                string trangThai = cell?.Value?.ToString();
+
+                if (trangThai == "Đã khám")
+                {
+                    gird.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                    gird.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DarkGreen;
+                }
+                else if (trangThai == "Chờ kê thuốc")
+                {
+                    gird.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightYellow;
+                    gird.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DarkOrange;
+                }
+                else
+                {
+                    gird.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White;
+                    gird.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Black;
+                }
+            }
+        }
+
+        private void gird_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= gird.Rows.Count) return;
+
+            DataGridViewRow row = gird.Rows[e.RowIndex];
+            if (row.Cells["Mã lịch hẹn"].Value != DBNull.Value)
+            {
+                _maLichHen = Convert.ToInt32(row.Cells["Mã lịch hẹn"].Value);
+            }
+            string trangThai = row.Cells["Trạng thái"].Value?.ToString();
+
+            // Đổ thông tin cơ bản lên các control trước
+            hoten.Text = row.Cells["Tên bệnh nhân"].Value?.ToString();
+            mabenhnhan.Text = row.Cells["Mã bệnh nhân"].Value?.ToString();
+            string ngay = row.Cells["Ngày hẹn"].Value?.ToString();
+            string gio = row.Cells["Giờ hẹn"].Value?.ToString();
+            ngaykham.Text = ngay + " " + gio;
+
+            if (trangThai == "Đã khám")
+            {
+                MessageBox.Show("Bệnh nhân này đã khám xong.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnKeToa.Visible = false;
+                btnKeToa.Enabled = false;
+                btnLapphieu.Visible = false;
+                btnLapphieu.Enabled = false;
+                return;
+            }
+
+            if (trangThai == "Chờ khám")
+            {
+                btnLapphieu.Visible = true;
+                btnLapphieu.Enabled = true;
+                btnKeToa.Visible = false;
+                btnKeToa.Enabled = false;
+
+                _maPKBVuaLap = -1;
+                _maBNVuaLap = -1;
+            }
+            else if (trangThai == "Chờ kê thuốc")
+            {
+                btnLapphieu.Visible = false;
+                btnLapphieu.Enabled = false;
+
+                // SỬA LỖI TẠI ĐÂY: Thay vì row.Cells[1].Value, ta gọi đích danh tên cột "Mã bệnh nhân"
+                _maBNVuaLap = Convert.ToInt32(row.Cells["Mã bệnh nhân"].Value);
+
+                // Tìm maPKB mới nhất của bệnh nhân này để tiến hành kê toa
+                List<phieukhambenhDTO> listPKB = pkbBUS.select();
+                var pkbCuaBN = listPKB
+                    .Where(x => x.MaBenhNhan == _maBNVuaLap)
+                    .OrderByDescending(x => x.MaPKB)
+                    .FirstOrDefault();
+
+                if (pkbCuaBN != null)
+                {
+                    _maPKBVuaLap = pkbCuaBN.MaPKB;
+                }
+
+                btnKeToa.Visible = true;
+                btnKeToa.Enabled = true;
             }
         }
 
         private void btnKeToa_Click(object sender, EventArgs e)
         {
-            KeToa toa = new KeToa();
-            toa.Show();
+            if (_maPKBVuaLap == -1 || _maBNVuaLap == -1)
+            {
+                MessageBox.Show("Không tìm thấy thông tin phiếu khám hợp lệ cho bệnh nhân này.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            KeToa toa = new KeToa(_maPKBVuaLap, _maBNVuaLap);
+            toa.ShowDialog();
+
+            // Làm sạch dữ liệu sau khi hoàn tất kê toa
+            Load_Gird();
+            btnKeToa.Visible = false;
+            btnKeToa.Enabled = false;
+            _maPKBVuaLap = -1;
+            _maBNVuaLap = -1;
         }
 
         private void mabenhnhan_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mabenhnhan.SelectedIndex < 0) return;
-            //lấy mã đã được chọn
             int selectedMaBN = int.Parse(mabenhnhan.SelectedItem.ToString());
-            //lấy danh sách bệnh nhân
             List<BenhNhanDTO> listBenhNhan = bnBUS.select();
             load_ten(listBenhNhan, selectedMaBN);
         }

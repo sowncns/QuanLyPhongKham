@@ -29,9 +29,9 @@ namespace QLPKBUS
             return re;
         }
 
-        public bool CapNhatTrangThai(int maBenhNhan, string trangThaiMoi)
+        public bool CapNhatTrangThai(int maLichHen, string trangThaiMoi)
         {
-            return lhDAL.CapNhatTrangThai(maBenhNhan, trangThaiMoi);
+            return lhDAL.CapNhatTrangThai(maLichHen, trangThaiMoi);
         }
         public List<lichHenDTO> selectByDate(DateTime date)
         {

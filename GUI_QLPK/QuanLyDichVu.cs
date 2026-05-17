@@ -74,13 +74,71 @@ namespace GUI_QLPK
             }
         }
 
-        private void themdv_Click(object sender, EventArgs e)
+        //private void themdv_Click(object sender, EventArgs e)
+        //{
+        //    ThemDichVuMoi themdvm = new ThemDichVuMoi();
+        //    themdvm.Show();
+        //    load_data();
+        //}
+        private void Them_Click(object sender, EventArgs e)
         {
-            ThemDichVuMoi themdvm = new ThemDichVuMoi();
-            themdvm.Show();
-            load_data();
-        }
+            float gia;
 
+            if (string.IsNullOrWhiteSpace(txtTenDV.Text) ||
+                string.IsNullOrWhiteSpace(txtTienDV.Text))
+            {
+                MessageBox.Show(
+                    "Vui lòng nhập đầy đủ thông tin",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+
+            if (!float.TryParse(txtTienDV.Text, out gia) || gia <= 0)
+            {
+                MessageBox.Show(
+                    "Tiền dịch vụ không hợp lệ",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
+            dichvuDTO dv = new dichvuDTO();
+
+            dv.TenDichVu = txtTenDV.Text.Trim();
+            dv.TienDichVu = gia;
+
+            bool kq = dvBus.them(dv);
+
+            if (kq)
+            {
+                MessageBox.Show(
+                    "Thêm dịch vụ thành công",
+                    "Result",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+                load_data();
+
+                txtTenDV.Clear();
+                txtTienDV.Clear();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Thêm dịch vụ thất bại",
+                    "Result",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
+        }
         private void capnhatdv_Click(object sender, EventArgs e)
         {
             float tien;

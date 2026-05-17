@@ -80,9 +80,49 @@ namespace GUI_QLPM
 
         private void Them_Click(object sender, EventArgs e)
         {
-            ThemTaiKhoan ttk = new ThemTaiKhoan();
-            ttk.ShowDialog();
-            load_data();
+          if (string.IsNullOrWhiteSpace(username.Text) ||
+        string.IsNullOrWhiteSpace(password.Text) ||
+        string.IsNullOrWhiteSpace(hoten.Text))
+            {
+                MessageBox.Show(
+                    "Vui lòng nhập đầy đủ thông tin tài khoản",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
+            taiKhoanDTO tk = new taiKhoanDTO();
+
+            tk.Username = username.Text.Trim();
+            tk.Password = password.Text.Trim();
+            tk.Name = hoten.Text.Trim();
+            tk.MaLoai = comboBoxRole.SelectedIndex + 1;
+
+            bool kq = tkBus.them(tk);
+
+            if (!kq)
+            {
+                MessageBox.Show(
+                    "Thêm tài khoản thất bại",
+                    "Result",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Thêm tài khoản thành công",
+                    "Result",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                load_data();
+                this.Close();
+            }
         }
 
         private void TimKiem_Click(object sender, EventArgs e)

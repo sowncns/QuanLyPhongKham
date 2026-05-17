@@ -23,17 +23,19 @@ namespace QLPKBUS
             return beDAL.them(be);
         }
 
-        public bool SuaBenh(benhDTO be, int maBenhold) // Đổi maBenhold sang int
+        public bool SuaBenh(benhDTO be)
         {
-            if (string.IsNullOrEmpty(be.TenBenh))
+            if (string.IsNullOrWhiteSpace(be.TenBenh))
             {
-                throw new Exception("Tên bệnh sửa đổi không được để trống!");
+                throw new Exception("Tên bệnh không được để trống!");
             }
-            if (maBenhold <= 0)
+
+            if (be.MaBenh <= 0)
             {
-                throw new Exception("Mã bệnh cũ cần sửa đổi không hợp lệ!");
+                throw new Exception("Mã bệnh không hợp lệ!");
             }
-            return beDAL.sua(be, maBenhold);
+
+            return beDAL.sua(be);
         }
 
         public bool XoaBenh(benhDTO be)

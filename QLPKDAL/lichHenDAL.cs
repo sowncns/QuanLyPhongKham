@@ -112,16 +112,40 @@ namespace QLPKDAL
             }
         }
 
-        public bool CapNhatTrangThai(int maBenhNhan, string trangThaiMoi) // Changed parameter to int
+        //public bool CapNhatTrangThai(int maBenhNhan, string trangThaiMoi) // Changed parameter to int
+        //{
+        //    // Cập nhật theo mã bệnh nhân như code cũ của bạn
+        //    string query = "UPDATE LichHen SET trangThai = @trangThaiMoi WHERE maBenhNhan = @maBenhNhan";
+        //    using (SqlConnection con = new SqlConnection(ConnectionString))
+        //    using (SqlCommand cmd = new SqlCommand(query, con))
+        //    {
+        //        cmd.Parameters.AddWithValue("@trangThaiMoi", trangThaiMoi);
+        //        cmd.Parameters.AddWithValue("@maBenhNhan", maBenhNhan);
+
+        //        try
+        //        {
+        //            con.Open();
+        //            return cmd.ExecuteNonQuery() > 0;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw new Exception("Lỗi khi cập nhật trạng thái lịch hẹn: " + ex.Message);
+        //        }
+        //    }
+        //}
+        public bool CapNhatTrangThai(int maLichHen, string trangThaiMoi)
         {
-            // Cập nhật theo mã bệnh nhân như code cũ của bạn
-            string query = "UPDATE LichHen SET trangThai = @trangThaiMoi WHERE maBenhNhan = @maBenhNhan";
+            // Thêm điều kiện CAST(NgayHen AS DATE) = CAST(GETDATE() AS DATE)
+            // để chỉ update lịch hẹn trong ngày hôm nay
+            string query = @"UPDATE LichHen 
+                     SET trangThai = @trangThaiMoi 
+                     WHERE maLichHen = @maLichHen  ";
+
             using (SqlConnection con = new SqlConnection(ConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@trangThaiMoi", trangThaiMoi);
-                cmd.Parameters.AddWithValue("@maBenhNhan", maBenhNhan);
-
+                cmd.Parameters.AddWithValue("@maLichHen", maLichHen);
                 try
                 {
                     con.Open();
@@ -133,10 +157,9 @@ namespace QLPKDAL
                 }
             }
         }
-
         public List<lichHenDTO> selectByDate(DateTime ngay)
         {
-            string query = "SELECT * FROM LichHen WHERE CAST(ngayHen AS DATE) = @ngay";
+            string query = "SELECT * FROM LichHen WHERE CAST(ngayHen AS DATE) = @ngay AND trangThai NOT IN (N'Đã khám', N'Chờ kê thuốc') ";
             List<lichHenDTO> ds = new List<lichHenDTO>();
 
             using (SqlConnection con = new SqlConnection(ConnectionString))

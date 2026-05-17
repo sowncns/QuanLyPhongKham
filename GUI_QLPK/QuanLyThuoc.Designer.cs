@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Them = new Guna.UI2.WinForms.Guna2Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -48,12 +48,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.cachdung = new Guna.UI2.WinForms.Guna2ComboBox();
             this.QLThuoc = new Guna.UI2.WinForms.Guna2Panel();
-            this.gird = new Guna.UI2.WinForms.Guna2DataGridView();
-            this.soluong = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
+            this.soluong = new System.Windows.Forms.NumericUpDown();
+            this.gird = new Guna.UI2.WinForms.Guna2DataGridView();
             this.QLThuoc.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gird)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.soluong)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gird)).BeginInit();
             this.SuspendLayout();
             // 
             // Them
@@ -81,11 +81,12 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(79, 151);
+            this.label3.Location = new System.Drawing.Point(82, 91);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(85, 21);
+            this.label3.Size = new System.Drawing.Size(78, 19);
             this.label3.TabIndex = 4;
             this.label3.Text = "Mã thuốc:";
+            this.label3.Visible = false;
             // 
             // label4
             // 
@@ -93,7 +94,7 @@
             this.label4.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(610, 151);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(73, 21);
+            this.label4.Size = new System.Drawing.Size(67, 19);
             this.label4.TabIndex = 5;
             this.label4.Text = "Đơn giá:";
             // 
@@ -112,6 +113,7 @@
             this.dongia.Location = new System.Drawing.Point(729, 140);
             this.dongia.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dongia.Name = "dongia";
+            this.dongia.PasswordChar = '\0';
             this.dongia.PlaceholderText = "";
             this.dongia.SelectedText = "";
             this.dongia.Size = new System.Drawing.Size(247, 40);
@@ -130,14 +132,16 @@
             this.mathuoc.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mathuoc.ForeColor = System.Drawing.Color.Black;
             this.mathuoc.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.mathuoc.Location = new System.Drawing.Point(198, 140);
+            this.mathuoc.Location = new System.Drawing.Point(198, 91);
             this.mathuoc.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.mathuoc.Name = "mathuoc";
+            this.mathuoc.PasswordChar = '\0';
             this.mathuoc.PlaceholderText = "";
             this.mathuoc.SelectedText = "";
             this.mathuoc.Size = new System.Drawing.Size(247, 40);
             this.mathuoc.TabIndex = 18;
             this.mathuoc.TabStop = false;
+            this.mathuoc.Visible = false;
             // 
             // key
             // 
@@ -157,6 +161,7 @@
             this.key.Location = new System.Drawing.Point(141, 23);
             this.key.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.key.Name = "key";
+            this.key.PasswordChar = '\0';
             this.key.PlaceholderText = "Tìm từ khóa";
             this.key.SelectedText = "";
             this.key.Size = new System.Drawing.Size(460, 48);
@@ -251,9 +256,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(79, 280);
+            this.label1.Location = new System.Drawing.Point(82, 202);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(99, 21);
+            this.label1.Size = new System.Drawing.Size(89, 19);
             this.label1.TabIndex = 31;
             this.label1.Text = "Đơn vị tính:";
             // 
@@ -267,7 +272,7 @@
             this.donvitinh.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.donvitinh.ForeColor = System.Drawing.Color.Black;
             this.donvitinh.ItemHeight = 30;
-            this.donvitinh.Location = new System.Drawing.Point(198, 269);
+            this.donvitinh.Location = new System.Drawing.Point(198, 202);
             this.donvitinh.Name = "donvitinh";
             this.donvitinh.Size = new System.Drawing.Size(247, 36);
             this.donvitinh.TabIndex = 32;
@@ -276,9 +281,9 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(79, 213);
+            this.label2.Location = new System.Drawing.Point(79, 140);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 21);
+            this.label2.Size = new System.Drawing.Size(81, 19);
             this.label2.TabIndex = 33;
             this.label2.Text = "Tên thuốc:";
             // 
@@ -294,9 +299,10 @@
             this.tenthuoc.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tenthuoc.ForeColor = System.Drawing.Color.Black;
             this.tenthuoc.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.tenthuoc.Location = new System.Drawing.Point(198, 202);
+            this.tenthuoc.Location = new System.Drawing.Point(198, 139);
             this.tenthuoc.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tenthuoc.Name = "tenthuoc";
+            this.tenthuoc.PasswordChar = '\0';
             this.tenthuoc.PlaceholderText = "";
             this.tenthuoc.SelectedText = "";
             this.tenthuoc.Size = new System.Drawing.Size(247, 40);
@@ -308,7 +314,7 @@
             this.label5.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(610, 213);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(95, 21);
+            this.label5.Size = new System.Drawing.Size(84, 19);
             this.label5.TabIndex = 35;
             this.label5.Text = "Cách dùng:";
             // 
@@ -354,30 +360,58 @@
             this.QLThuoc.Size = new System.Drawing.Size(1092, 410);
             this.QLThuoc.TabIndex = 25;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(85, 270);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(75, 19);
+            this.label6.TabIndex = 38;
+            this.label6.Text = "Số lượng:";
+            // 
+            // soluong
+            // 
+            this.soluong.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.soluong.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.soluong.Location = new System.Drawing.Point(198, 270);
+            this.soluong.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.soluong.Name = "soluong";
+            this.soluong.Size = new System.Drawing.Size(247, 26);
+            this.soluong.TabIndex = 37;
+            // 
             // gird
             // 
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.White;
-            this.gird.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
+            this.gird.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.gird.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.gird.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gird.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gird.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.gird.ColumnHeadersHeight = 30;
             this.gird.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gird.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gird.DefaultCellStyle = dataGridViewCellStyle6;
             this.gird.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gird.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.gird.Location = new System.Drawing.Point(0, 410);
@@ -410,34 +444,6 @@
             this.gird.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             this.gird.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellContentClick);
             // 
-            // soluong
-            // 
-            this.soluong.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.soluong.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.soluong.Location = new System.Drawing.Point(729, 270);
-            this.soluong.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.soluong.Name = "soluong";
-            this.soluong.Size = new System.Drawing.Size(247, 28);
-            this.soluong.TabIndex = 37;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(610, 273);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(82, 21);
-            this.label6.TabIndex = 38;
-            this.label6.Text = "Số lượng:";
-            // 
             // QuanLyThuoc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -450,8 +456,8 @@
             this.Text = "QuanLyThuoc";
             this.QLThuoc.ResumeLayout(false);
             this.QLThuoc.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gird)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.soluong)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gird)).EndInit();
             this.ResumeLayout(false);
 
         }

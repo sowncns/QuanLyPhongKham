@@ -169,7 +169,7 @@ namespace GUI_QLPK
             int maBacSiChon = int.Parse(bacsi.SelectedValue.ToString());
             foreach (lichHenDTO x in dsTrongNgay)
             {
-                if (x.MaTaiKhoan == maBacSiChon && x.NgayHen.TimeOfDay == gio)
+                if (x.MaTaiKhoan == maBacSiChon && x.NgayHen.TimeOfDay == gio )
                 {
                     MessageBox.Show("Khung giờ này bác sĩ đã có lịch. Vui lòng chọn giờ khác.",
                                     "Trùng lịch",

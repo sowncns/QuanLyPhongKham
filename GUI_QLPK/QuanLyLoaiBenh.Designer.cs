@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.QuanLyLB = new Guna.UI2.WinForms.Guna2Panel();
             this.tenBenh = new Guna.UI2.WinForms.Guna2TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -39,10 +39,9 @@
             this.Sua = new Guna.UI2.WinForms.Guna2Button();
             this.TimKiem = new Guna.UI2.WinForms.Guna2Button();
             this.key = new Guna.UI2.WinForms.Guna2TextBox();
-            this.maBenh = new Guna.UI2.WinForms.Guna2TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.Them = new Guna.UI2.WinForms.Guna2Button();
             this.gird = new Guna.UI2.WinForms.Guna2DataGridView();
+            this.maBenh = new System.Windows.Forms.TextBox();
             this.QuanLyLB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gird)).BeginInit();
             this.SuspendLayout();
@@ -50,6 +49,7 @@
             // QuanLyLB
             // 
             this.QuanLyLB.BackColor = System.Drawing.Color.LightCyan;
+            this.QuanLyLB.Controls.Add(this.maBenh);
             this.QuanLyLB.Controls.Add(this.tenBenh);
             this.QuanLyLB.Controls.Add(this.label2);
             this.QuanLyLB.Controls.Add(this.HoanTac);
@@ -57,8 +57,6 @@
             this.QuanLyLB.Controls.Add(this.Sua);
             this.QuanLyLB.Controls.Add(this.TimKiem);
             this.QuanLyLB.Controls.Add(this.key);
-            this.QuanLyLB.Controls.Add(this.maBenh);
-            this.QuanLyLB.Controls.Add(this.label3);
             this.QuanLyLB.Controls.Add(this.Them);
             this.QuanLyLB.Dock = System.Windows.Forms.DockStyle.Top;
             this.QuanLyLB.Location = new System.Drawing.Point(0, 0);
@@ -78,23 +76,26 @@
             this.tenBenh.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tenBenh.ForeColor = System.Drawing.Color.Black;
             this.tenBenh.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.tenBenh.Location = new System.Drawing.Point(198, 202);
+            this.tenBenh.Location = new System.Drawing.Point(207, 177);
             this.tenBenh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tenBenh.Name = "tenBenh";
+            this.tenBenh.PasswordChar = '\0';
             this.tenBenh.PlaceholderText = "";
             this.tenBenh.SelectedText = "";
             this.tenBenh.Size = new System.Drawing.Size(247, 40);
             this.tenBenh.TabIndex = 34;
+            this.tenBenh.TextChanged += new System.EventHandler(this.tenBenh_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(79, 213);
+            this.label2.Location = new System.Drawing.Point(79, 188);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(115, 21);
+            this.label2.Size = new System.Drawing.Size(105, 19);
             this.label2.TabIndex = 33;
             this.label2.Text = "Tên loại bệnh:";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // HoanTac
             // 
@@ -198,43 +199,12 @@
             this.key.Location = new System.Drawing.Point(141, 23);
             this.key.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.key.Name = "key";
+            this.key.PasswordChar = '\0';
             this.key.PlaceholderText = "Tìm từ khóa";
             this.key.SelectedText = "";
             this.key.Size = new System.Drawing.Size(460, 48);
             this.key.TabIndex = 20;
             this.key.TextOffset = new System.Drawing.Point(5, 0);
-            // 
-            // maBenh
-            // 
-            this.maBenh.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.maBenh.DefaultText = "";
-            this.maBenh.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
-            this.maBenh.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
-            this.maBenh.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.maBenh.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.maBenh.Enabled = false;
-            this.maBenh.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.maBenh.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.maBenh.ForeColor = System.Drawing.Color.Black;
-            this.maBenh.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.maBenh.Location = new System.Drawing.Point(198, 140);
-            this.maBenh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.maBenh.Name = "maBenh";
-            this.maBenh.PlaceholderText = "";
-            this.maBenh.SelectedText = "";
-            this.maBenh.Size = new System.Drawing.Size(247, 40);
-            this.maBenh.TabIndex = 18;
-            this.maBenh.TabStop = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(79, 151);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 21);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Mã loại bệnh:";
             // 
             // Them
             // 
@@ -259,28 +229,28 @@
             // 
             // gird
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
-            this.gird.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
+            this.gird.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.gird.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.gird.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gird.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.DodgerBlue;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gird.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.gird.ColumnHeadersHeight = 30;
             this.gird.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gird.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Times New Roman", 10.86792F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gird.DefaultCellStyle = dataGridViewCellStyle6;
             this.gird.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gird.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.gird.Location = new System.Drawing.Point(0, 362);
@@ -313,6 +283,14 @@
             this.gird.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             this.gird.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellContentClick);
             // 
+            // maBenh
+            // 
+            this.maBenh.Location = new System.Drawing.Point(196, 112);
+            this.maBenh.Name = "maBenh";
+            this.maBenh.Size = new System.Drawing.Size(10, 20);
+            this.maBenh.TabIndex = 35;
+            this.maBenh.Visible = false;
+            // 
             // QuanLyLoaiBenh
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -340,9 +318,8 @@
         private Guna.UI2.WinForms.Guna2Button Sua;
         private Guna.UI2.WinForms.Guna2Button TimKiem;
         private Guna.UI2.WinForms.Guna2TextBox key;
-        private Guna.UI2.WinForms.Guna2TextBox maBenh;
-        private System.Windows.Forms.Label label3;
         private Guna.UI2.WinForms.Guna2Button Them;
         private Guna.UI2.WinForms.Guna2DataGridView gird;
+        private System.Windows.Forms.TextBox maBenh;
     }
 }

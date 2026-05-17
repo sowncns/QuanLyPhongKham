@@ -174,10 +174,86 @@ namespace GUI_QLPK
 
         private void Them_Click(object sender, EventArgs e)
         {
-            ThemBenhNhanMoi tbnm = new ThemBenhNhanMoi();
-            if (tbnm.ShowDialog() == DialogResult.OK)
+            if (string.IsNullOrWhiteSpace(hoten.Text) ||
+        string.IsNullOrWhiteSpace(gioitinh.Text) ||
+        string.IsNullOrWhiteSpace(diachi.Text) ||
+        string.IsNullOrWhiteSpace(macccd.Text) ||
+        string.IsNullOrWhiteSpace(email.Text))
             {
-                load_data(); // chỉ reload sau khi thêm thành công
+                MessageBox.Show(
+                    "Vui lòng nhập đầy đủ thông tin bệnh nhân",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
+            if (ngaysinh.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show(
+                    "Ngày sinh không hợp lệ",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
+            BenhNhanDTO bn = new BenhNhanDTO();
+
+            bn.TenBN = hoten.Text.Trim();
+            bn.GtBN = gioitinh.Text.Trim();
+            bn.NgsinhBN = ngaysinh.Value;
+            bn.DiachiBN = diachi.Text.Trim();
+            bn.CanCuocCongDan = macccd.Text.Trim();
+            bn.Email = email.Text.Trim();
+
+            List<BenhNhanDTO> danhSach = bnBus.select();
+
+            if (danhSach.Any(b => b.CanCuocCongDan == bn.CanCuocCongDan))
+            {
+                MessageBox.Show(
+                    "CCCD đã tồn tại",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
+            bool kq = bnBus.them(bn);
+
+            if (kq)
+            {
+                MessageBox.Show(
+                    "Thêm bệnh nhân thành công",
+                    "Result",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+                load_data();
+
+                hoten.Clear();
+                gioitinh.Text = "";
+                diachi.Clear();
+                macccd.Clear();
+                email.Clear();
+
+                ngaysinh.Value = DateTime.Now;
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Thêm bệnh nhân thất bại",
+                    "Result",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
             }
         }
 

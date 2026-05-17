@@ -66,7 +66,7 @@
             this.themdv.Size = new System.Drawing.Size(123, 36);
             this.themdv.TabIndex = 2;
             this.themdv.Text = "Thêm";
-            this.themdv.Click += new System.EventHandler(this.themdv_Click);
+            this.themdv.Click += new System.EventHandler(this.Them_Click);
             // 
             // label3
             // 
@@ -74,7 +74,7 @@
             this.label3.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(79, 174);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(103, 21);
+            this.label3.Size = new System.Drawing.Size(91, 19);
             this.label3.TabIndex = 4;
             this.label3.Text = "Tên dịch vụ:";
             // 
@@ -84,7 +84,7 @@
             this.label4.Font = new System.Drawing.Font("Times New Roman", 12.22642F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(610, 174);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(106, 21);
+            this.label4.Size = new System.Drawing.Size(95, 19);
             this.label4.TabIndex = 5;
             this.label4.Text = "Tiền dịch vụ:";
             // 
@@ -103,6 +103,7 @@
             this.txtTienDV.Location = new System.Drawing.Point(729, 163);
             this.txtTienDV.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtTienDV.Name = "txtTienDV";
+            this.txtTienDV.PasswordChar = '\0';
             this.txtTienDV.PlaceholderText = "";
             this.txtTienDV.SelectedText = "";
             this.txtTienDV.Size = new System.Drawing.Size(247, 40);
@@ -123,6 +124,7 @@
             this.txtTenDV.Location = new System.Drawing.Point(198, 163);
             this.txtTenDV.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtTenDV.Name = "txtTenDV";
+            this.txtTenDV.PasswordChar = '\0';
             this.txtTenDV.PlaceholderText = "";
             this.txtTenDV.SelectedText = "";
             this.txtTenDV.Size = new System.Drawing.Size(247, 40);
@@ -250,6 +252,7 @@
             this.maDichVu.Location = new System.Drawing.Point(141, 23);
             this.maDichVu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.maDichVu.Name = "maDichVu";
+            this.maDichVu.PasswordChar = '\0';
             this.maDichVu.PlaceholderText = "Tìm từ khóa";
             this.maDichVu.SelectedText = "";
             this.maDichVu.Size = new System.Drawing.Size(460, 48);

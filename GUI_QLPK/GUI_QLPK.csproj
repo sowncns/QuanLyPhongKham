@@ -246,29 +246,11 @@
     <Compile Include="QuanLyThuoc.Designer.cs">
       <DependentUpon>QuanLyThuoc.cs</DependentUpon>
     </Compile>
-    <Compile Include="ThemBenhNhanMoi.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ThemBenhNhanMoi.Designer.cs">
-      <DependentUpon>ThemBenhNhanMoi.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ThemDichVuMoi.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ThemDichVuMoi.Designer.cs">
-      <DependentUpon>ThemDichVuMoi.cs</DependentUpon>
-    </Compile>
     <Compile Include="ThemPhieuKhamBenh.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ThemPhieuKhamBenh.Designer.cs">
       <DependentUpon>ThemPhieuKhamBenh.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ThemTaiKhoan.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ThemTaiKhoan.Designer.cs">
-      <DependentUpon>ThemTaiKhoan.cs</DependentUpon>
     </Compile>
     <Compile Include="TraCuuBenhNhan.cs">
       <SubType>Form</SubType>
@@ -337,17 +319,8 @@
     <EmbeddedResource Include="QuanLyThuoc.resx">
       <DependentUpon>QuanLyThuoc.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ThemBenhNhanMoi.resx">
-      <DependentUpon>ThemBenhNhanMoi.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ThemDichVuMoi.resx">
-      <DependentUpon>ThemDichVuMoi.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ThemPhieuKhamBenh.resx">
       <DependentUpon>ThemPhieuKhamBenh.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ThemTaiKhoan.resx">
-      <DependentUpon>ThemTaiKhoan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TraCuuBenhNhan.resx">
       <DependentUpon>TraCuuBenhNhan.cs</DependentUpon>

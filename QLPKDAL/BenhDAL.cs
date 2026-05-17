@@ -24,7 +24,7 @@ namespace QLPKDTO
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 // Truyền tên Stored Procedure thay vì chuỗi lệnh INSERT văn bản
-                using (SqlCommand cmd = new SqlCommand("sp_ThemBenhMoi", con))
+                using (SqlCommand cmd = new SqlCommand("sp_ThemBenh", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure; // Khai báo kiểu thủ tục
 
@@ -45,7 +45,7 @@ namespace QLPKDTO
                 }
             }
         }
-        public bool sua(benhDTO be, int maBenhold)
+        public bool sua(benhDTO be)
         {
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
@@ -53,8 +53,7 @@ namespace QLPKDTO
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    // Vì database maBenh là int, ta thực hiện ép kiểu từ chuỗi mã cũ sang int
-                    cmd.Parameters.AddWithValue("@maBenh", maBenhold);
+                    cmd.Parameters.AddWithValue("@maBenh", be.MaBenh);
                     cmd.Parameters.AddWithValue("@tenBenh", be.TenBenh);
 
                     try
@@ -65,7 +64,9 @@ namespace QLPKDTO
                     }
                     catch (SqlException ex)
                     {
-                        throw new Exception("Lỗi hệ thống khi cập nhật: " + ex.Message);
+                        throw new Exception(
+                            "Lỗi hệ thống khi cập nhật: " + ex.Message
+                        );
                     }
                 }
             }
